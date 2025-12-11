@@ -8,7 +8,7 @@
     <!-- Start block -->
     <div class="mx-auto mb-12 grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-        <div class="w-full min-w-0 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
+        <div class="w-full min-w-0 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6" script="area-chart.js">
             <div class="flex justify-between items-start">
                 <div>
                     <h5 class="text-2xl font-semibold text-gray-900 dark:text-white ">32.4k</h5>
@@ -81,86 +81,7 @@
             </div>
         </div>
 
-        <script>
-            // Get the CSS variable --color-brand and convert it to hex for ApexCharts
-            const getBrandColor = () => {
-                // Get the computed style of the document's root element
-                const computedStyle = getComputedStyle(document.documentElement);
-                // Get the value of the --color-brand CSS variable
-                return computedStyle.getPropertyValue('--color-fg-brand').trim() || "#1447E6";
-            };
-            const brandColor = getBrandColor();
-            const options = {
-                chart: {
-                    height: "100%",
-                    maxWidth: "100%",
-                    type: "area",
-                    fontFamily: "Inter, sans-serif",
-                    dropShadow: {
-                        enabled: false,
-                    },
-                    toolbar: {
-                        show: false,
-                    },
-                },
-                tooltip: {
-                    enabled: true,
-                    x: {
-                        show: false,
-                    },
-                },
-                fill: {
-                    type: "gradient",
-                    gradient: {
-                        opacityFrom: 0.55,
-                        opacityTo: 0,
-                        shade: brandColor,
-                        gradientToColors: [brandColor],
-                    },
-                },
-                dataLabels: {
-                    enabled: false,
-                },
-                stroke: {
-                    width: 6,
-                },
-                grid: {
-                    show: false,
-                    strokeDashArray: 4,
-                    padding: {
-                        left: 2,
-                        right: 2,
-                        top: 0
-                    },
-                },
-                series: [{
-                    name: "New users",
-                    data: [6500, 6418, 6456, 6526, 6356, 6456],
-                    color: brandColor,
-                }, ],
-                xaxis: {
-                    categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February',
-                        '07 February'
-                    ],
-                    labels: {
-                        show: false,
-                    },
-                    axisBorder: {
-                        show: false,
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                },
-                yaxis: {
-                    show: false,
-                },
-            }
-            if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') {
-                const chart = new ApexCharts(document.getElementById("area-chart"), options);
-                chart.render();
-            }
-        </script>
+
 
         <div class="w-full min-w-0 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
             <div class="flex justify-between border-light border-b pb-3">
@@ -193,7 +114,6 @@
             </div>
 
             <div id="bar-chart"></div>
-
             <div class="grid grid-cols-1 items-center border-light border-t justify-between">
                 <div class="flex justify-between items-center pt-4 md:pt-6">
                     <!-- Button -->
@@ -251,106 +171,7 @@
                 </div>
             </div>
         </div>
-        <script>
-            const options = {
-                series: [{
-                        name: "Income",
-                        color: "#007A55",
-                        data: ["1420", "1620", "1820", "1420", "1650", "2120"],
-                    },
-                    {
-                        name: "Expense",
-                        data: ["788", "810", "866", "788", "1100", "1200"],
-                        color: "#C70036",
-                    }
-                ],
-                chart: {
-                    sparkline: {
-                        enabled: false,
-                    },
-                    type: "bar",
-                    width: "100%",
-                    height: 400,
-                    toolbar: {
-                        show: false,
-                    }
-                },
-                fill: {
-                    opacity: 1,
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: true,
-                        columnWidth: "100%",
-                        borderRadiusApplication: "end",
-                        borderRadius: 6,
-                        dataLabels: {
-                            position: "top",
-                        },
-                    },
-                },
-                legend: {
-                    show: true,
-                    position: "bottom",
-                },
-                dataLabels: {
-                    enabled: false,
-                },
-                tooltip: {
-                    shared: true,
-                    intersect: false,
-                    formatter: function(value) {
-                        return "$" + value
-                    }
-                },
-                xaxis: {
-                    labels: {
-                        show: true,
-                        style: {
-                            fontFamily: "Inter, sans-serif",
-                            cssClass: 'text-xs font-normal fill-body'
-                        },
-                        formatter: function(value) {
-                            return "$" + value
-                        }
-                    },
-                    categories: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    axisTicks: {
-                        show: false,
-                    },
-                    axisBorder: {
-                        show: false,
-                    },
-                },
-                yaxis: {
-                    labels: {
-                        show: true,
-                        style: {
-                            fontFamily: "Inter, sans-serif",
-                            cssClass: 'text-xs font-normal fill-body'
-                        }
-                    }
-                },
-                grid: {
-                    show: true,
-                    strokeDashArray: 4,
-                    padding: {
-                        left: 2,
-                        right: 2,
-                        top: -20
-                    },
-                },
-                fill: {
-                    opacity: 1,
-                }
-            }
 
-            if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
-                const chart = new ApexCharts(document.getElementById("bar-chart"), options);
-                chart.render();
-            }
-            s
-        </script>
 
         <div class="w-full min-w-0 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
             <div class="flex justify-between items-start w-full">
@@ -559,102 +380,7 @@
                     </a>
                 </div>
             </div>
-
         </div>
-        <script>
-            // Get the CSS variable --color-brand and convert it to hex for ApexCharts
-            const getBrandColor = () => {
-                // Get the computed style of the document's root element
-                const computedStyle = getComputedStyle(document.documentElement);
-
-                // Get the value of the --color-brand CSS variable
-                return computedStyle.getPropertyValue('--color-fg-brand').trim() || "#1447E6";
-            };
-
-            const getBrandSecondaryColor = () => {
-                const computedStyle = getComputedStyle(document.documentElement);
-                return computedStyle.getPropertyValue('--color-fg-brand-subtle').trim() || "#1447E6";
-            };
-
-            const getBrandTertiaryColor = () => {
-                const computedStyle = getComputedStyle(document.documentElement);
-                return computedStyle.getPropertyValue('--color-fg-brand-strong').trim() || "#1447E6";
-            };
-
-            const getNeutralPrimaryColor = () => {
-                const computedStyle = getComputedStyle(document.documentElement);
-                return computedStyle.getPropertyValue('--color-neutral-primary').trim() || "#1447E6";
-            };
-
-            const brandColor = getBrandColor();
-            const brandSecondaryColor = getBrandSecondaryColor();
-            const brandTertiaryColor = getBrandTertiaryColor();
-            const neutralPrimaryColor = getNeutralPrimaryColor();
-
-            const getChartOptions = () => {
-                return {
-                    series: [52.8, 26.8, 20.4],
-                    colors: [brandColor, brandSecondaryColor, brandTertiaryColor],
-                    chart: {
-                        height: 420,
-                        width: "100%",
-                        type: "pie",
-                    },
-                    stroke: {
-                        colors: [neutralPrimaryColor],
-                        lineCap: "",
-                    },
-                    plotOptions: {
-                        pie: {
-                            labels: {
-                                show: true,
-                            },
-                            size: "100%",
-                            dataLabels: {
-                                offset: -25
-                            }
-                        },
-                    },
-                    labels: ["Direct", "Organic search", "Referrals"],
-                    dataLabels: {
-                        enabled: true,
-                        style: {
-                            fontFamily: "Inter, sans-serif",
-                        },
-                    },
-                    legend: {
-                        position: "bottom",
-                        fontFamily: "Inter, sans-serif",
-                    },
-                    yaxis: {
-                        labels: {
-                            formatter: function(value) {
-                                return value + "%"
-                            },
-                        },
-                    },
-                    xaxis: {
-                        labels: {
-                            formatter: function(value) {
-                                return value + "%"
-                            },
-                        },
-                        axisTicks: {
-                            show: false,
-                        },
-                        axisBorder: {
-                            show: false,
-                        },
-                    },
-                }
-            }
-
-            if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
-                const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
-                chart.render();
-            }
-        </script>
-
     </div>
 
 
