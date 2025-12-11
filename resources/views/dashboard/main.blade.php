@@ -4,8 +4,662 @@
 
 @section('content')
 
+    <h2 class="text-4xl mt-12 mb-4 font-bold text-gray-900 dark:text-white">Data Visualization</h2>
     <!-- Start block -->
-    <div class="mx-auto max-w-7xl py-12">
+    <div class="mx-auto mb-12 grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <div class="w-full min-w-0 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h5 class="text-2xl font-semibold text-gray-900 dark:text-white ">32.4k</h5>
+                    <p class="text-gray-900 dark:text-gray-400 ">Users this week</p>
+                </div>
+                <div class="flex items-center px-2.5 py-0.5 font-medium text-fg-success text-center">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v13m0-13 4 4m-4-4-4 4" />
+                    </svg>
+                    12%
+                </div>
+            </div>
+            <div id="area-chart"></div>
+            <div class="grid grid-cols-1 items-center border-light border-t justify-between">
+                <div class="flex justify-between items-center pt-4 md:pt-6">
+                    <!-- Button -->
+                    <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
+                        data-dropdown-placement="bottom"
+                        class="text-sm font-medium text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-400 text-center inline-flex items-center"
+                        type="button">
+                        Last 7 days
+                        <svg class="w-4 h-4 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 9-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="lastDaysdropdown" class="z-10 hidden bg-white dark:bg-gray-700 rounded-base shadow-lg w-44">
+                        <ul class="p-2 text-sm text-gray-900 dark:text-white font-medium"
+                            aria-labelledby="dropdownDefaultButton">
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Yesterday</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Today</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    7 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    30 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    90 days</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#"
+                        class="inline-flex items-center text-fg-brand bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm px-3 py-2 focus:outline-none">
+                        Users Report
+                        <svg class="w-4 h-4 ms-1.5 -me-0.5 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 12H5m14 0-4 4m4-4-4-4" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Get the CSS variable --color-brand and convert it to hex for ApexCharts
+            const getBrandColor = () => {
+                // Get the computed style of the document's root element
+                const computedStyle = getComputedStyle(document.documentElement);
+                // Get the value of the --color-brand CSS variable
+                return computedStyle.getPropertyValue('--color-fg-brand').trim() || "#1447E6";
+            };
+            const brandColor = getBrandColor();
+            const options = {
+                chart: {
+                    height: "100%",
+                    maxWidth: "100%",
+                    type: "area",
+                    fontFamily: "Inter, sans-serif",
+                    dropShadow: {
+                        enabled: false,
+                    },
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                tooltip: {
+                    enabled: true,
+                    x: {
+                        show: false,
+                    },
+                },
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        opacityFrom: 0.55,
+                        opacityTo: 0,
+                        shade: brandColor,
+                        gradientToColors: [brandColor],
+                    },
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    width: 6,
+                },
+                grid: {
+                    show: false,
+                    strokeDashArray: 4,
+                    padding: {
+                        left: 2,
+                        right: 2,
+                        top: 0
+                    },
+                },
+                series: [{
+                    name: "New users",
+                    data: [6500, 6418, 6456, 6526, 6356, 6456],
+                    color: brandColor,
+                }, ],
+                xaxis: {
+                    categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February',
+                        '07 February'
+                    ],
+                    labels: {
+                        show: false,
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                },
+                yaxis: {
+                    show: false,
+                },
+            }
+            if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("area-chart"), options);
+                chart.render();
+            }
+        </script>
+
+        <div class="w-full min-w-0 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
+            <div class="flex justify-between border-light border-b pb-3">
+                <dl>
+                    <dt class="text-gray-900 dark:text-white">Profit</dt>
+                    <dd class="text-2xl font-semibold text-gray-900 dark:text-white">$5,405</dd>
+                </dl>
+                <div>
+                    <span
+                        class="inline-flex items-center bg-success-soft border border-success-subtle text-fg-success-strong text-xs font-medium px-1.5 py-0.5 rounded">
+                        <svg class="w-4 h-4 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v13m0-13 4 4m-4-4-4 4" />
+                        </svg>
+                        Profit rate 23.5%
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 py-3">
+                <dl>
+                    <dt class="text-gray-900 dark:text-gray-400">Income</dt>
+                    <dd class="text-lg font-semibold text-fg-success">$23,635</dd>
+                </dl>
+                <dl>
+                    <dt class="text-gray-900 dark:text-gray-400">Expense</dt>
+                    <dd class="text-lg font-semibold text-fg-danger">-$18,230</dd>
+                </dl>
+            </div>
+
+            <div id="bar-chart"></div>
+
+            <div class="grid grid-cols-1 items-center border-light border-t justify-between">
+                <div class="flex justify-between items-center pt-4 md:pt-6">
+                    <!-- Button -->
+                    <button id="dropdownLastDays3Button" data-dropdown-toggle="LastDays3dropdown"
+                        data-dropdown-placement="bottom"
+                        class="text-sm font-medium text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-400 text-center inline-flex items-center"
+                        type="button">
+                        Last 7 days
+                        <svg class="w-4 h-4 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 9-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="LastDays3dropdown"
+                        class="z-10 hidden bg-white dark:bg-gray-700  rounded-base shadow-lg w-44">
+                        <ul class="p-2 text-sm text-gray-900 dark:text-white font-medium"
+                            aria-labelledby="dropdownLastDays3Button">
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Yesterday</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Today</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    7 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    30 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    90 days</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#"
+                        class="inline-flex items-center text-fg-brand bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm px-3 py-2 focus:outline-none">
+                        Revenue Report
+                        <svg class="w-4 h-4 ms-1.5 -me-0.5 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 12H5m14 0-4 4m4-4-4-4" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script>
+            const options = {
+                series: [{
+                        name: "Income",
+                        color: "#007A55",
+                        data: ["1420", "1620", "1820", "1420", "1650", "2120"],
+                    },
+                    {
+                        name: "Expense",
+                        data: ["788", "810", "866", "788", "1100", "1200"],
+                        color: "#C70036",
+                    }
+                ],
+                chart: {
+                    sparkline: {
+                        enabled: false,
+                    },
+                    type: "bar",
+                    width: "100%",
+                    height: 400,
+                    toolbar: {
+                        show: false,
+                    }
+                },
+                fill: {
+                    opacity: 1,
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        columnWidth: "100%",
+                        borderRadiusApplication: "end",
+                        borderRadius: 6,
+                        dataLabels: {
+                            position: "top",
+                        },
+                    },
+                },
+                legend: {
+                    show: true,
+                    position: "bottom",
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    formatter: function(value) {
+                        return "$" + value
+                    }
+                },
+                xaxis: {
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-body'
+                        },
+                        formatter: function(value) {
+                            return "$" + value
+                        }
+                    },
+                    categories: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    axisTicks: {
+                        show: false,
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                },
+                yaxis: {
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-body'
+                        }
+                    }
+                },
+                grid: {
+                    show: true,
+                    strokeDashArray: 4,
+                    padding: {
+                        left: 2,
+                        right: 2,
+                        top: -20
+                    },
+                },
+                fill: {
+                    opacity: 1,
+                }
+            }
+
+            if (document.getElementById("bar-chart") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("bar-chart"), options);
+                chart.render();
+            }
+            s
+        </script>
+
+        <div class="w-full min-w-0 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6">
+            <div class="flex justify-between items-start w-full">
+                <div class="flex-col items-center">
+                    <div class="flex items-center mb-1">
+                        <h5 class="text-xl font-semibold text-gray-900 dark:text-white me-1">Website traffic</h5>
+                        <svg data-popover-target="traffic-info" data-popover-placement="bottom"
+                            class="w-4 h-4 text-gray-900 dark:text-white hover:text-gray-600 cursor-pointer ms-1"
+                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.441 2.441 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <div data-popover id="traffic-info" role="tooltip"
+                            class="absolute z-10 p-3 invisible inline-block text-sm text-gray-900 dark:text-white transition-opacity duration-300 bg-white dark:bg-gray-700 rounded-base shadow-lg opacity-0 w-72">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Activity growth - Incremental
+                                </h3>
+                                <p class="mb-4">Report helps navigate cumulative growth of community activities. Ideally,
+                                    the chart should have a growing trend, as stagnating chart signifies a significant
+                                    decrease of community activity.</p>
+                                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Calculation</h3>
+                                <p class="mb-4">For each date bucket, the all-time volume of activities is calculated.
+                                    This means that activities in period n contain all activities up to period n, plus the
+                                    activities generated by your community in period.</p>
+                                <a href="#" class="flex items-center font-medium text-fg-brand hover:underline">
+                                    Read more
+                                    <svg class="w-4 h-4 ms-1 rtl:rotate-180" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <div data-popper-arrow></div>
+                        </div>
+                    </div>
+                    <button id="dateRangeButton" data-dropdown-toggle="dateRangeDropdown"
+                        data-dropdown-ignore-click-outside-class="datepicker" type="button"
+                        class="inline-flex items-center text-fg-brand font-medium hover:underline">
+                        31 Nov - 31 Dev
+                        <svg class="w-4.5 h-4.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 9-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="dateRangeDropdown"
+                        class="z-10 hidden bg-white dark:bg-gray-700 rounded-base shadow-lg w-80 lg:w-md">
+                        <div id="date-range-picker" date-rangepicker class="flex items-center p-2">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-white   dark:text-gray-900" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" />
+                                    </svg>
+                                </div>
+                                <input id="datepicker-range-start" name="start" type="text"
+                                    class="block w-full ps-9 pe-3 bg-white border-default-medium text-white   dark:text-gray-900 text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-gray-900"
+                                    placeholder="Start date">
+                            </div>
+                            <span class="mx-4 text-gray-900 dark:text-white">to</span>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-white   dark:text-gray-900" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" />
+                                    </svg>
+                                </div>
+                                <input id="datepicker-range-end" name="end" type="text"
+                                    class="block w-full ps-9 pe-3 bg-white border border-default-medium text-white   dark:text-gray-900 text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-gray-900"
+                                    placeholder="End date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end items-center">
+                    <button id="widgetDropdownButton" data-dropdown-toggle="widgetDropdown"
+                        data-dropdown-placement="bottom" type="button"
+                        class="inline-flex items-center justify-center text-gray-900 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-700 hover:text-white focus:ring-3 focus:ring-gray-600 shadow-lg font-medium leading-5 rounded-base text-sm w-9 h-9 focus:outline-none border border-gray-600">
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="3"
+                                d="M6 12h.01m6 0h.01m5.99 0h.01" />
+                        </svg>
+                        <span class="sr-only">Open dropdown</span>
+                    </button>
+                    <div id="widgetDropdown" class="z-10 hidden bg-white dark:bg-gray-700 rounded-base shadow-lg w-44">
+                        <ul class="p-2 text-sm text-gray-900 dark:text-white font-medium"
+                            aria-labelledby="widgetDropdownButton">
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
+                                    <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.089 2.089 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z" />
+                                    </svg>
+                                    Edit widget
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
+                                    <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01" />
+                                    </svg>
+                                    Download data
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
+                                    <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8 8v8m0-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 0a4 4 0 0 1-4 4h-1a3 3 0 0 0-3 3" />
+                                    </svg>
+                                    Add to repository
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">
+                                    <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                    </svg>
+                                    Delete widget
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Chart -->
+            <div class="py-6" id="pie-chart"></div>
+
+            <div class="grid grid-cols-1 items-center border-light border-t justify-between">
+                <div class="flex justify-between items-center pt-4 md:pt-6">
+                    <!-- Button -->
+                    <button id="dropdownLastDays4Button" data-dropdown-toggle="LastDays4dropdown"
+                        data-dropdown-placement="bottom"
+                        class="text-sm font-medium text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-400 text-center inline-flex items-center"
+                        type="button">
+                        Last 7 days
+                        <svg class="w-4 h-4 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 9-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="LastDays4dropdown" class="z-10 hidden bg-white dark:bg-gray-700 rounded-base shadow-lg w-44">
+                        <ul class="p-2 text-sm text-gray-900 dark:text-white font-medium"
+                            aria-labelledby="dropdownLastDays4Button">
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Yesterday</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Today</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    7 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    30 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Last
+                                    90 days</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#"
+                        class="inline-flex items-center text-fg-brand bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm px-3 py-2 focus:outline-none">
+                        Traffic Report
+                        <svg class="w-4 h-4 ms-1.5 -me-0.5 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 12H5m14 0-4 4m4-4-4-4" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            // Get the CSS variable --color-brand and convert it to hex for ApexCharts
+            const getBrandColor = () => {
+                // Get the computed style of the document's root element
+                const computedStyle = getComputedStyle(document.documentElement);
+
+                // Get the value of the --color-brand CSS variable
+                return computedStyle.getPropertyValue('--color-fg-brand').trim() || "#1447E6";
+            };
+
+            const getBrandSecondaryColor = () => {
+                const computedStyle = getComputedStyle(document.documentElement);
+                return computedStyle.getPropertyValue('--color-fg-brand-subtle').trim() || "#1447E6";
+            };
+
+            const getBrandTertiaryColor = () => {
+                const computedStyle = getComputedStyle(document.documentElement);
+                return computedStyle.getPropertyValue('--color-fg-brand-strong').trim() || "#1447E6";
+            };
+
+            const getNeutralPrimaryColor = () => {
+                const computedStyle = getComputedStyle(document.documentElement);
+                return computedStyle.getPropertyValue('--color-neutral-primary').trim() || "#1447E6";
+            };
+
+            const brandColor = getBrandColor();
+            const brandSecondaryColor = getBrandSecondaryColor();
+            const brandTertiaryColor = getBrandTertiaryColor();
+            const neutralPrimaryColor = getNeutralPrimaryColor();
+
+            const getChartOptions = () => {
+                return {
+                    series: [52.8, 26.8, 20.4],
+                    colors: [brandColor, brandSecondaryColor, brandTertiaryColor],
+                    chart: {
+                        height: 420,
+                        width: "100%",
+                        type: "pie",
+                    },
+                    stroke: {
+                        colors: [neutralPrimaryColor],
+                        lineCap: "",
+                    },
+                    plotOptions: {
+                        pie: {
+                            labels: {
+                                show: true,
+                            },
+                            size: "100%",
+                            dataLabels: {
+                                offset: -25
+                            }
+                        },
+                    },
+                    labels: ["Direct", "Organic search", "Referrals"],
+                    dataLabels: {
+                        enabled: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                        },
+                    },
+                    legend: {
+                        position: "bottom",
+                        fontFamily: "Inter, sans-serif",
+                    },
+                    yaxis: {
+                        labels: {
+                            formatter: function(value) {
+                                return value + "%"
+                            },
+                        },
+                    },
+                    xaxis: {
+                        labels: {
+                            formatter: function(value) {
+                                return value + "%"
+                            },
+                        },
+                        axisTicks: {
+                            show: false,
+                        },
+                        axisBorder: {
+                            show: false,
+                        },
+                    },
+                }
+            }
+
+            if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
+                chart.render();
+            }
+        </script>
+
+    </div>
+
+
+    <h2 class="text-4xl mb-4 font-bold text-gray-900 dark:text-white">CRUD Table</h2>
+    <div class="mb-12">
         <!-- Start coding here -->
         <div class="bg-white dark:bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -14,8 +668,8 @@
                         <label for="simple-search" class="sr-only">Search</label>
                         <div class="relative w-full">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                    viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                    fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
                                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                                         clip-rule="evenodd" />
@@ -1097,8 +1751,8 @@
                     <div class="flex items-center space-x-3 sm:space-x-4">
                         <button type="button"
                             class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            <svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
+                            <svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor"
+                                viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                 <path fill-rule="evenodd"
                                     d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
