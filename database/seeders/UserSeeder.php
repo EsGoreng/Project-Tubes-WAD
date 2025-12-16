@@ -30,7 +30,15 @@ class UserSeeder extends Seeder
                 'role' => 'kasir',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
+            [
+                'nama' => 'Akhdan (Kasir)',
+                'email' => 'akhdan@laundry.com',
+                'password' => Hash::make('kasir123'),
+                'role' => 'kasir',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
