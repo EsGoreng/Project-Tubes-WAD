@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'name' => 'Intan Nurlistiyani (Owner)',
-                'email' => 'admin@laundry.com',
+                'email' => 'intan9el@gmail.com',
                 'password' => Hash::make('admin123'), // Password di-hash
                 'role' => 'admin',
                 'created_at' => now(),
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'nama' => 'Hadi (Kasir)',
-                'email' => 'hadi@laundry.com',
+                'email' => 'hadidpranoto@gmail.com',
                 'password' => Hash::make('kasir123'),
                 'role' => 'kasir',
                 'created_at' => now(),
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'nama' => 'Akhdan (Kasir)',
-                'email' => 'akhdan@laundry.com',
+                'email' => 'itsnaakhdan25@gmail.com',
                 'password' => Hash::make('kasir123'),
                 'role' => 'kasir',
                 'created_at' => now(),
