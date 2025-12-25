@@ -4,28 +4,21 @@ namespace App\Livewire;
 
 use Carbon\Carbon;
 
-use Livewire\Component;
-
 use App\Models\Order;
 use App\Models\Service;
 use App\Models\Customer;
 
+use Livewire\Component;
+
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Builder;
-
-use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Filters\Filter;
-
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
@@ -34,19 +27,32 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-
-use Filament\Notifications\Notification;
-
-use Filament\Actions\Action;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Actions\Concerns\InteractsWithActions;
-
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
 
-use pxlrbt\FilamentExcel\Columns\Column;
-use pxlrbt\FilamentExcel\Exports\ExcelExport;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use Filament\Tables\Table;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Concerns\InteractsWithTable;
+
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+
+use Filament\Notifications\Notification;
+
+use Illuminate\Database\Eloquent\Builder;
+
+
+use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\Concerns\InteractsWithActions;
+
+
 
 class OrderTable extends Component implements HasTable, HasForms, HasActions
 {
@@ -61,7 +67,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
             ->heading('CRUD Order')
             ->description('Tabel ini berfungsi untuk manage order laundry dari pelanggan')
             ->query(Order::query()
-                ->with(['customer', 'user', 'latestStatus'])
+                ->with(['customer', 'user', 'trackings'])
                 ->withCount('orderDetails'))
             ->columns([
                 TextColumn::make('id_orders')
@@ -127,6 +133,21 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                 TernaryFilter::make('is_pickup')
                     ->label('Status Pickup'),
 
+                SelectFilter::make('latestStatus.status')
+                    ->label('Status Laundry')
+                    ->options([
+                        'Dicuci' => 'Dicuci',
+                        'Dijemur' => 'Dijemur',
+                        'Disetrika' => 'Disetrika',
+                        'Siap' => 'Siap',
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['value'],
+                            fn (Builder $query, $status) => $query->whereHas('latestStatus', fn (Builder $query) => $query->where('status', $status))
+                        );
+                    }),
+
                 Filter::make('tgl_masuk')
                     ->schema([
                         DatePicker::make('dari_tanggal'),
@@ -158,6 +179,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                         $record->load('orderDetails');
                         $data = $record->toArray();
                         $data['orderDetails'] = $record->orderDetails->toArray();
+                        $data['tracking_status'] = $record->latestStatus?->status;
                         $schema->fill($data);
                     })
                     ->disabledSchema(),
@@ -170,6 +192,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                         $record->load('orderDetails');
                         $data = $record->toArray();
                         $data['orderDetails'] = $record->orderDetails->toArray();
+                        $data['tracking_status'] = $record->latestStatus?->status;
                         $schema->fill($data);
                     })
                     ->schema(fn(Schema $schema) => $this->getOrderForm($schema))
@@ -217,6 +240,13 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                             if (!empty($idsToDelete)) {
                                 $record->orderDetails()->whereIn('id_order_details', $idsToDelete)->delete();
                             }
+
+                            // Handle Tracking Status Update
+                            $newStatus = $data['tracking_status'] ?? null;
+                            $currentStatus = $record->latestStatus?->status;
+                            if ($newStatus && $newStatus !== $currentStatus) {
+                                $record->trackings()->create(['status' => $newStatus]);
+                            }
                         });
 
                         Notification::make()
@@ -261,6 +291,11 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                                 'is_pickup'             => $data['is_pickup'],
                                 'total_harga'           => $data['total_harga'],
                             ]);
+
+                            // Handle Initial Tracking Status
+                            if (!empty($data['tracking_status'])) {
+                                $order->trackings()->create(['status' => $data['tracking_status']]);
+                            }
 
                             $items = data_get($data, 'orderDetails', []);
 
@@ -331,7 +366,23 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
 
                             ])
                         ]),
-            ]);
+
+                BulkAction::make('delete')
+                    ->requiresConfirmation()
+                    ->action(function (Collection $records) {
+                        DB::transaction(function () use ($records) {
+                            foreach ($records as $record) {
+                                $record->orderDetails()->delete();
+                                $record->delete();
+                            }
+                        });
+
+                        Notification::make()
+                            ->title('Order berhasil dihapus')
+                            ->danger()
+                            ->send();
+                })
+                    ]);
 
     }
 
@@ -368,6 +419,17 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                             ->required()
                             ->default('Pending'),
 
+                        Select::make('tracking_status')
+                            ->label('Status Laundry')
+                            ->options([
+                                'Dicuci' => 'Dicuci',
+                                'Dijemur' => 'Dijemur',
+                                'Disetrika' => 'Disetrika',
+                                'Siap' => 'Siap',
+                            ])
+                            ->required()
+                            ->default('Dicuci'),
+
                         Toggle::make('is_pickup')
                             ->label('Perlu Dijemput?')
                             ->inline(false),
@@ -379,8 +441,6 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                         DatePicker::make('tgl_selesai_estimasi')
                             ->default(now()->addDays(2)),
 
-                        
-
                         TextInput::make('total_harga')
                             ->label('Total Tagihan')
                             ->prefix('Rp')
@@ -389,13 +449,6 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                             ->reactive()
                             ->live()
                             ->dehydrated(),
-
-                        Textarea::make('customer.alamat')
-                            ->label('Alamat')
-                            ->rows(10)
-                            ->disabled()
-                            ->readonly()
-                            ->columns(150),
 
                         TextInput::make('customer.no_wa')
                             ->label('No WA')
@@ -407,7 +460,14 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                             ->label('Email')
                             ->disabled()
                             ->readOnly()
-                            ->copyable('1')
+                            ->copyable('1'),
+
+                        Textarea::make('customer.alamat')
+                            ->label('Alamat')
+                            ->rows(10)
+                            ->disabled()
+                            ->readonly()
+                            ->columns(150),
                     ])->columns(3),
 
                 Section::make('Detail Laundry')
