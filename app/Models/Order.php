@@ -60,6 +60,6 @@ class Order extends Model
     // Helper: Ambil status terakhir
     public function latestStatus()
     {
-        return $this->hasOne(OrderTracking::class, 'order_id', 'id_orders')->latestOfMany();
+        return $this->hasOne(OrderTracking::class, 'order_id', 'id_orders')->latestOfMany('id_order_tracking');
     }
 }

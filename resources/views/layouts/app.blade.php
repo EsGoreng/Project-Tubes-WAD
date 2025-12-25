@@ -33,9 +33,20 @@
                                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                                     Home
                                 </x-nav-link>
+                                <x-nav-link :href="route('pricelist')" :active="request()->routeIs('pricelist')">
+                                    Price List
+                                </x-nav-link>
+                                <x-nav-link :href="route('termsandconditions')" :active="request()->routeIs('termsandconditions')">
+                                    Terms and Conditions
+                                </x-nav-link>
+
+                                <x-nav-link href="/#contact" :active="request()->routeIs('contact')">
+                                    Contact Us
+                                </x-nav-link>
+
                                 @if ($isCustomer)
                                     <x-nav-link :href="route('customer_menu')" :active="request()->routeIs('customer_menu')">
-                                        Cek Status Cucian
+                                        Check Laundry Status
                                     </x-nav-link>
                                 @endif
                                 @if ($isAdmin)
@@ -56,6 +67,7 @@
 
                         <div class="ml-4 flex items-center md:ml-6">
                             {{-- Cek apakah ada user yang login (Admin ATAU Customer) --}}
+
                             @if ($currentUser)
 
                                 <div class="text-sm text-gray-300 mr-2">
@@ -117,6 +129,7 @@
                                 </el-dropdown>
                             @else
                                 {{-- Jika Belum Login (GUEST) --}}
+
                                 <a href="{{ route('login') }}"
                                     class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
                                     Log in
@@ -161,6 +174,16 @@
                 <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         Home
+                    </x-nav-link>
+                    <x-nav-link :href="route('pricelist')" :active="request()->routeIs('pricelist')">
+                        Price List
+                    </x-nav-link>
+                    <x-nav-link :href="route('termsandconditions')" :active="request()->routeIs('termsandconditions')">
+                        Terms and Conditions
+                    </x-nav-link>
+
+                    <x-nav-link href="#contact" :active="request()->routeIs('contact')">
+                        Contact Us
                     </x-nav-link>
                     @if ($isCustomer)
                         <x-nav-link :href="route('customer_menu')" :active="request()->routeIs('customer_menu')">

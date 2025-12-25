@@ -71,13 +71,23 @@ class TransactionSeeder extends Seeder
             // 4. Update Total Harga di Tabel Order
             $order->update(['total_harga' => $totalHargaTransaksi]);
 
-            // 5. Buat Tracking Awal
-            OrderTracking::create([
-                'order_id' => $order->id_orders,
-                'status' => 'Dicuci',
-                'created_at' => $order->tgl_masuk,
-                'updated_at' => $order->tgl_masuk
-            ]);
+            // 5. Buat Tracking (Simulasi History Status)
+            $possibleStatuses = ['Dicuci', 'Dijemur', 'Disetrika', 'Siap'];
+            
+            // Tentukan sampai tahap mana order ini (Random 0-3)
+            $currentStageIndex = rand(0, count($possibleStatuses) - 1);
+
+            for ($k = 0; $k <= $currentStageIndex; $k++) {
+                // Buat waktu tracking bertahap (setiap status beda 4 jam)
+                $trackingTime = Carbon::parse($order->tgl_masuk)->addHours($k * 4);
+
+                OrderTracking::create([
+                    'order_id' => $order->id_orders,
+                    'status' => $possibleStatuses[$k],
+                    'created_at' => $trackingTime,
+                    'updated_at' => $trackingTime
+                ]);
+            }
         }
     }
 }

@@ -2,39 +2,51 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
+
+use Livewire\Component;
+
 use App\Models\Order;
 use App\Models\Service;
-use Livewire\Component;
 use App\Models\Customer;
-use Filament\Tables\Table;
-use Filament\Actions\Action;
-use Filament\Schemas\Schema;
-use Filament\Actions\ExportAction;
+
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
+
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Filters\Filter;
-use Illuminate\Contracts\Auth\Guard;
+
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Contracts\HasForms;
-use App\Filament\Exports\OrderExporter;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
+
 use Filament\Notifications\Notification;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
+
+use Filament\Actions\Action;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Tables\Filters\TernaryFilter;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithActions;
+
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Concerns\InteractsWithForms;
+
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 
 class OrderTable extends Component implements HasTable, HasForms, HasActions
 {
@@ -49,7 +61,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
             ->heading('CRUD Order')
             ->description('Tabel ini berfungsi untuk manage order laundry dari pelanggan')
             ->query(Order::query()
-                ->with(['customer', 'user'])
+                ->with(['customer', 'user', 'latestStatus'])
                 ->withCount('orderDetails'))
             ->columns([
                 TextColumn::make('id_orders')
@@ -75,7 +87,19 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                     ->label('Item')
                     ->alignCenter(),
 
-                TextColumn::make('total_harga')
+                TextColumn::make('latestStatus.status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'Siap' => 'success',
+                        'Disetrika' => 'info',
+                        'Dijemur' => 'warning',
+                        'Dicuci' => 'primary',
+                        default => 'gray',
+                    })
+                    ->alignCenter(),
+
+                TextColumn::make(name: 'total_harga')
                     ->money('IDR')
                     ->weight('bold'),
 
@@ -131,9 +155,10 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                     ->modalCancelActionLabel('Tutup')
                     ->schema(fn(Schema $schema) => $this->getOrderForm($schema))
                     ->mountUsing(function (Schema $schema, Order $record) {
-                        $schema->fill(
-                            $record->load('orderDetails')->toArray()
-                        );
+                        $record->load('orderDetails');
+                        $data = $record->toArray();
+                        $data['orderDetails'] = $record->orderDetails->toArray();
+                        $schema->fill($data);
                     })
                     ->disabledSchema(),
 
@@ -142,9 +167,10 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                     ->icon('heroicon-o-pencil')
                     ->record(fn(Order $record) => $record)
                     ->mountUsing(function (Schema $schema, Order $record) {
-                        $schema->fill(
-                            $record->load('orderDetails')->toArray()
-                        );
+                        $record->load('orderDetails');
+                        $data = $record->toArray();
+                        $data['orderDetails'] = $record->orderDetails->toArray();
+                        $schema->fill($data);
                     })
                     ->schema(fn(Schema $schema) => $this->getOrderForm($schema))
                     ->action(function (array $data, Order $record) {
@@ -158,11 +184,38 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                                 'total_harga'           => $data['total_harga'],
                             ]);
 
-                            // Hapus detail lama agar tidak duplikat
-                            $record->orderDetails()->delete();
+                            // Handle Order Details (Update, Create, Delete)
+                            $existingIds = $record->orderDetails()->pluck('id_order_details')->toArray();
+                            $submittedDetails = data_get($data, 'orderDetails', []);
+                            $submittedIds = [];
 
-                            foreach (data_get($data, 'orderDetails', []) as $detail) {
-                                $record->orderDetails()->create($detail);
+                            foreach ($submittedDetails as $detail) {
+                                $detailId = $detail['id_order_details'] ?? null;
+
+                                if ($detailId && in_array($detailId, $existingIds)) {
+                                    // Update existing
+                                    $record->orderDetails()->where('id_order_details', $detailId)->update([
+                                        'service_id'     => $detail['service_id'],
+                                        'qty'            => $detail['qty'],
+                                        'harga_saat_ini' => $detail['harga_saat_ini'],
+                                        'subtotal'       => $detail['subtotal'],
+                                    ]);
+                                    $submittedIds[] = $detailId;
+                                } else {
+                                    // Create new
+                                    $record->orderDetails()->create([
+                                        'service_id'     => $detail['service_id'],
+                                        'qty'            => $detail['qty'],
+                                        'harga_saat_ini' => $detail['harga_saat_ini'],
+                                        'subtotal'       => $detail['subtotal'],
+                                    ]);
+                                }
+                            }
+
+                            // Delete removed items
+                            $idsToDelete = array_diff($existingIds, $submittedIds);
+                            if (!empty($idsToDelete)) {
+                                $record->orderDetails()->whereIn('id_order_details', $idsToDelete)->delete();
                             }
                         });
 
@@ -188,10 +241,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                             ->danger()
                             ->send();
                     }),
-            ])
-            // File: App\Livewire\OrderTable.php
-
-            // ... (kode sebelumnya tetap sama)
+                ])
 
             ->headerActions([
                 Action::make('add')
@@ -231,10 +281,56 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                             ->send();
                     }),
 
-                ExportAction::make('export')
+                ExportAction::make()
                     ->label('Export')
                     ->icon('heroicon-o-document-arrow-down')
-                    ->exporter(OrderExporter::class)
+                    ->color('warning')
+                    ->exports([
+                        ExcelExport::make('Data Order Laundry')
+                            ->withFilename(fn () => 'Sibersih-Laporan-Laundry-' . date('Y-m-d'))
+                            ->withColumns([
+                                Column::make('id_orders')->heading('ID Order'),
+                                
+                                // Relasi Customer
+                                Column::make('customer.nama_lengkap')->heading('Nama Pelanggan'),
+                                Column::make('customer.no_wa')->heading('No WhatsApp'),
+                                
+                                // Format Tanggal
+                                Column::make('tgl_masuk')
+                                    ->heading('Tanggal Masuk')
+                                    ->formatStateUsing(fn ($state) => Carbon::parse($state)->format('d/m/Y')),
+                                
+                                Column::make('tgl_selesai_estimasi')
+                                    ->heading('Estimasi Selesai')
+                                    ->formatStateUsing(fn ($state) => $state ? Carbon::parse($state)->format('d/m/Y') : '-'),
+
+                                // Hitung Jumlah Item
+                                Column::make('orderDetails_count')
+                                    ->heading('Jml Item')
+                                    ->getStateUsing(fn ($record) => $record->orderDetails()->count())
+                                    ,
+
+                                // Ambil Status Terakhir (Relasi)
+                                Column::make('latestStatus.status')
+                                    ->heading('Status Laundry')
+                                    ->formatStateUsing(fn ($state) => $state ?? 'Baru Masuk'),
+
+                                // Custom Boolean (Pickup)
+                                Column::make('is_pickup')
+                                    ->heading('Layanan Jemput')
+                                    ->formatStateUsing(fn ($state) => $state ? 'Ya' : 'Tidak'),
+
+                                // Status Pembayaran
+                                Column::make('status_pembayaran')
+                                    ->heading('Status Bayar'),
+
+                                // Uang (Format Numerik untuk Excel agar bisa disum)
+                                Column::make('total_harga')
+                                    ->heading('Total Tagihan')
+                                    ->formatStateUsing(fn ($state) => (float) $state), // Pastikan jadi angka murni di excel
+
+                            ])
+                        ]),
             ]);
 
     }
@@ -317,20 +413,15 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                 Section::make('Detail Laundry')
                     ->schema([
                         Repeater::make('orderDetails')
-                            ->relationship()
                             ->live()
                             ->afterStateUpdated(function (Get $get, Set $set) {
                                 self::updateTotals($get, $set);
                             })
                             ->schema([
+                                Hidden::make('id_order_details'),
                                 Select::make('service_id')
                                     ->label('Layanan')
-                                    ->relationship(
-                                        name: 'service',
-                                        titleAttribute: 'nama_paket',
-                                        modifyQueryUsing: fn($query) =>
-                                        $query->where('is_active', true)
-                                    )
+                                    ->options(Service::where('is_active', true)->pluck('nama_paket', 'id_services'))
                                     ->required()
                                     ->live()
                                     ->reactive()

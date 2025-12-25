@@ -7,6 +7,15 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/price-list', function () {
+    return view('pricelist');
+})->name('pricelist');
+
+Route::get('/terms-and-conditions', function () {
+    return view('termsandconditions');
+})->name('termsandconditions');
+
+
 Route::middleware('auth:web,customer')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
