@@ -35,10 +35,6 @@ class AuthenticatedSessionController extends Controller
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            if (! Auth::guard('web')->user()->hasVerifiedEmail()) {
-                return redirect()->route('verification.notice');
-            }
-
             // Redirect Admin ke dashboard Admin
             return redirect()->intended('/dashboard');
         }

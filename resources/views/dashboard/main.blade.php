@@ -59,8 +59,8 @@
                 CRM
             </x-filament::tabs.item>
 
-            <x-filament::tabs.item @click="activeTab = 'services'" :active="false"
-                alpine-active="activeTab === 'services'">
+            <x-filament::tabs.item @click="activeTab = 'service'" :active="false"
+                alpine-active="activeTab === 'service'">
                 Services
             </x-filament::tabs.item>
 
@@ -79,12 +79,8 @@
                 </div>
             </div>
 
-            <div x-show="activeTab === 'services'" x-cloak x-transition>
-                <div class="p-4 bg-white shadow rounded-lg">
-                    <h2 class="text-xl font-bold mb-4">Layanan Laundry</h2>
-                    {{-- @livewire('services-table') --}}
-                    <p class="text-gray-600">Konten tabel services akan muncul di sini.</p>
-                </div>
+            <div x-show="activeTab === 'service'" x-cloak x-transition>
+                    @livewire('service-table')
             </div>
 
         </div>
