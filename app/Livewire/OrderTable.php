@@ -119,7 +119,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                     }),
 
                 ToggleColumn::make('is_pickup')
-                    ->label('Pickup')
+                    ->label('Jemput')
                     ->onColor('success')
                     ->offColor('danger'),
             ])
@@ -251,7 +251,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
 
                         Notification::make()
                             ->title('Order berhasil diupdate')
-                            ->body('Update ke Order berhasil disimpan.')
+                            ->body('Update berhasil disimpan.')
                             ->success()
                             ->send();
                     }),
