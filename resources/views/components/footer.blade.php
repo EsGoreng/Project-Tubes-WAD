@@ -3,9 +3,7 @@
         <div class="md:flex md:justify-between">
             <div class="mb-6 md:mb-0">
                 <a href="https://flowbite.com/" class="flex items-center">
-                    <img src="https://flowbite.com/docs/images/logo.svg" class="h-7 me-3" alt="FlowBite Logo" />
-                    <span
-                        class="text-gray-900 dark:text-white self-center text-2xl font-semibold whitespace-nowrap">Flowbite</span>
+                    <img src="{{ asset('images/logo_main.svg') }}" class="h-24 me-3" alt="FlowBite Logo" />
                 </a>
             </div>
             <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
@@ -46,8 +44,8 @@
         </div>
         <hr class="my-6 border-default sm:mx-auto lg:my-8" />
         <div class="sm:flex sm:items-center sm:justify-between">
-            <span class="text-sm text-gray-400 dark:text-white-200 sm:text-center">© 2023 <a
-                    href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
+            <span class="text-sm text-gray-400 dark:text-white-200 sm:text-center">© 2025 <a
+                    href="https://flowbite.com/" class="hover:underline">SiBersih</a>. All Rights Reserved.
             </span>
             <div class="flex mt-4 sm:justify-center sm:mt-0">
                 <a href="#" class="text-gray-400 dark:text-white-200 hover:text-gray-900 dark:text-white">

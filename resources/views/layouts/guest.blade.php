@@ -8,6 +8,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <link rel="icon" href="{{ asset('images/logo_mascot.svg') }}" type="image/x-icon">
+    @filamentStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 

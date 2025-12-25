@@ -14,19 +14,25 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id('id_orders');
 
-            // Relasi ke Customers (Custom PK id_customer)
+            // Relasi ke Customers
             $table->unsignedBigInteger('customer_id')->nullable();
-            $table->foreign('customer_id')->references('id_customer')->on('customers');
+            $table->foreign('customer_id')
+                ->references('id_customer')->on('customers')
+                ->onUpdate('cascade')
+                ->onDelete('set null'); // Data order aman meski customer dihapus
 
-            // Relasi ke Users (Custom PK id_user)
+            // Relasi ke Users
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')
+                ->references('id_user')->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('set null');
 
-            $table->dateTime('tgl_masuk')->useCurrent();
+            $table->dateTime('tgl_masuk');
             $table->dateTime('tgl_selesai_estimasi')->nullable();
             $table->decimal('total_harga', 10, 2)->default(0);
             $table->enum('status_pembayaran', ['Pending', 'Lunas'])->default('Pending');
-            $table->boolean('is_pickup')->default(false);
+            $table->boolean('is_pickup')->default(false); // 0: Antar sendiri, 1: Dijemput
             $table->timestamps();
         });
     }

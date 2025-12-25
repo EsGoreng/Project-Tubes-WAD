@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('order_tracking', function (Blueprint $table) {
             $table->id('id_order_tracking');
 
-            // Relasi ke Orders
-            $table->unsignedBigInteger('order_id')->nullable();
-            $table->foreign('order_id')->references('id_orders')->on('orders');
+            // Relasi ke Order
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')
+                ->references('id_orders')->on('orders')
+                ->onUpdate('cascade')
+                ->onDelete('cascade'); // Hapus Order = Hapus history tracking
 
             $table->enum('status', ['Dicuci', 'Dijemur', 'Disetrika', 'Siap']);
-
-            // Kolom updated_at sesuai permintaan
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

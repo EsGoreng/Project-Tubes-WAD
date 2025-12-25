@@ -14,13 +14,19 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id('id_order_details');
 
-            // Relasi ke Orders
-            $table->unsignedBigInteger('order_id')->nullable();
-            $table->foreign('order_id')->references('id_orders')->on('orders');
+            // Relasi ke Order
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')
+                ->references('id_orders')->on('orders')
+                ->onUpdate('cascade')
+                ->onDelete('cascade'); // Hapus Order induk = Hapus detail itemnya
 
             // Relasi ke Services
             $table->unsignedBigInteger('service_id')->nullable();
-            $table->foreign('service_id')->references('id_services')->on('services');
+            $table->foreign('service_id')
+                ->references('id_services')->on('services')
+                ->onUpdate('cascade')
+                ->onDelete('set null');
 
             $table->float('qty');
             $table->decimal('harga_saat_ini', 10, 2);

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
 
 class CustomerSeeder extends Seeder
 {
@@ -14,31 +14,26 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('customers')->insert([
-            [
-                'nama_lengkap' => 'Andi Susilo',
-                'no_wa' => '081234567890',
-                'alamat' => 'Jl. Mawar No. 10',
-                'email' => 'andi@gmail.com',
-                'password' => Hash::make('andi123'),
-                'created_at' => now(),
-            ],
-            [
-                'nama_lengkap' => 'Bu Dewi',
-                'no_wa' => '089876543210',
-                'alamat' => 'Perumahan Griya Indah Blok A',
-                'email' => null, // Skenario pelanggan offline tanpa email
-                'password' => null,
-                'created_at' => now(),
-            ],
-            [
-                'nama_lengkap' => 'Doni (Mahasiswa)',
-                'no_wa' => '085555555555',
-                'alamat' => 'Kos Pak Haji, Kamar 3',
-                'email' => 'doni@kampus.ac.id',
-                'password' => Hash::make('doni123'),
-                'created_at' => now(),
-            ]
+        $faker = Faker::create('id_ID');
+
+        for ($i = 0; $i < 10; $i++) {
+            Customer::create([
+                'nama_lengkap' => $faker->name,
+                'no_wa' => $faker->phoneNumber,
+                'alamat' => $faker->address,
+                'email' => $faker->unique()->safeEmail,
+                'password' => Hash::make('12345678'),
+                'description' => 'Pelanggan setia',
+            ]);
+        }
+
+        Customer::create([
+            'nama_lengkap' => 'Udin',
+            'no_wa' => '081234567890',
+            'alamat' => 'Jl. Contoh No. 123',
+            'email' => 'uramazingdev@gmail.com',
+            'password' => Hash::make('pelanggan123'),
+            'description' => 'Pelanggan',
         ]);
     }
 }

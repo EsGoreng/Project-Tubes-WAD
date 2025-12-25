@@ -19,9 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CustomerSeeder::class,
             ServiceSeeder::class,
-            OrderSeeder::class,
-            OrderDetailSeeder::class,
-            OrderTrackingSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }

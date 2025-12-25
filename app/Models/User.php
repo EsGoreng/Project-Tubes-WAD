@@ -17,10 +17,17 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var list<string>
      */
+
+    protected $table = 'users';
+    protected $primaryKey = 'id_user';
+    public $timestamps = false;
+
     protected $fillable = [
-        'name',
+        'nama_lengkap',
         'email',
+        'username',
         'password',
+        'role', // admin, kasir
     ];
 
     /**
@@ -44,5 +51,24 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id_user');
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Get the default foreign key name for the model.
+     * Memaksa foreign key menjadi 'user_id' agar kompatibel dengan Filament Export
+     */
+    public function getForeignKey()
+    {
+        return 'user_id';
     }
 }

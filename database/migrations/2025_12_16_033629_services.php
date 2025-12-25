@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id('id_services');
-            $table->string('nama_paket');
+            $table->string('nama_paket', 45);
             $table->enum('satuan', ['Kg', 'Pcs']);
             $table->decimal('harga', 10, 2);
-            $table->integer('estimasi_durasi');
+            $table->integer('estimasi_durasi'); // Durasi dalam jam/hari
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

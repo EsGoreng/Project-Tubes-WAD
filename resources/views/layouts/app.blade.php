@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
+    @filamentStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="icon" href="{{ asset('images/logo_mascot.svg') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
@@ -20,64 +21,112 @@
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
                         <div class="shrink-0">
-                            <img src="{{ asset('images/logo_title.svg') }}" alt="Your Company" class="size-32" />
+                            <img src="{{ asset('images/logo_title.svg') }}" alt="SiBersih" class="size-32" />
                         </div>
                         <div class="hidden md:block">
+                            @php
+                                $isCustomer = Auth::guard('customer')->check();
+                                $isAdmin = Auth::guard('web')->check();
+                            @endphp
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <!-- Current: "bg-gray-900 dark:bg-gray-950/50 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
                                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                                     Home
                                 </x-nav-link>
+                                @if ($isCustomer)
+                                    <x-nav-link :href="route('customer_menu')" :active="request()->routeIs('customer_menu')">
+                                        Cek Status Cucian
+                                    </x-nav-link>
+                                @endif
+                                @if ($isAdmin)
+                                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                        Dashboard
+                                    </x-nav-link>
+                                @endif
 
                             </div>
                         </div>
                     </div>
                     <div class="hidden md:block">
+                        @php
+                            $currentUser = Auth::guard('web')->user() ?? Auth::guard('customer')->user();
+                            $isCustomer = Auth::guard('customer')->check();
+                            $isAdmin = Auth::guard('web')->check();
+                        @endphp
+
                         <div class="ml-4 flex items-center md:ml-6">
-                            @if (Route::has('login'))
-                                @auth
-                                    <div>{{ Auth::user()->name }}</div>
-                                    <!-- Profile dropdown -->
-                                    <el-dropdown class="relative ml-4">
-                                        <button
-                                            class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                                            <span class="absolute -inset-1.5"></span>
-                                            <span class="sr-only">Open user menu</span>
-                                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                alt=""
-                                                class="size-8 rounded-full outline -outline-offset-1 outline-white/10" />
-                                        </button>
+                            {{-- Cek apakah ada user yang login (Admin ATAU Customer) --}}
+                            @if ($currentUser)
 
-                                        <el-menu anchor="bottom end" popover
-                                            class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-                                            <a href="{{ route('profile.edit') }}"
-                                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">Your
-                                                profile</a>
+                                <div class="text-sm text-gray-300 mr-2">
+                                    {{ $currentUser->nama_lengkap }}
+                                    <span class="text-xs text-gray-500 block text-right">
+                                        {{ $isAdmin ? '(Admin)' : '(Customer)' }}
+                                    </span>
+                                </div>
+
+                                <el-dropdown class="relative ml-4">
+                                    <button
+                                        class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                                        <span class="absolute -inset-1.5"></span>
+                                        <span class="sr-only">Open user menu</span>
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($currentUser->nama_lengkap) }}&background=random"
+                                            alt=""
+                                            class="size-8 rounded-full outline -outline-offset-1 outline-white/10" />
+                                    </button>
+
+                                    <el-menu anchor="bottom end" popover
+                                        class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+
+                                        {{-- MENU KHUSUS ADMIN --}}
+                                        @if ($isAdmin)
                                             <a href="{{ route('dashboard') }}"
-                                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">Dashboard</a>
+                                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
+                                                Admin Dashboard
+                                            </a>
+                                            <a href="{{ route('profile.edit') }}"
+                                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
+                                                Your
+                                                Profile
+                                            </a>
+                                        @endif
 
-                                            <form method="POST" action="{{ route('logout') }}">
-                                                @csrf
-                                                <a href="{{ route('logout') }}"
-                                                    onclick="event.preventDefault(); this.closest('form').submit();"
-                                                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">Sign
-                                                    out</a>
-                                            </form>
-                                        </el-menu>
-                                    </el-dropdown>
-                                @else
-                                    <a href="{{ route('login') }}"
+                                        {{-- MENU KHUSUS CUSTOMER --}}
+                                        @if ($isCustomer)
+                                            <a href="{{ route('customer_menu') }}"
+                                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
+                                                Cek Status Cucian
+                                            </a>
+                                            <a href="{{ route('profile.edit') }}"
+                                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
+                                                Your
+                                                Profile
+                                            </a>
+                                        @endif
+
+                                        {{-- LOGOUT (Sama untuk keduanya karena sudah dihandle Controller) --}}
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <a href="{{ route('logout') }}"
+                                                onclick="event.preventDefault(); this.closest('form').submit();"
+                                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
+                                                Sign out
+                                            </a>
+                                        </form>
+                                    </el-menu>
+                                </el-dropdown>
+                            @else
+                                {{-- Jika Belum Login (GUEST) --}}
+                                <a href="{{ route('login') }}"
+                                    class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+                                    Log in
+                                </a>
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}"
                                         class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-                                        Log in
+                                        Register
                                     </a>
-
-                                    @if (Route::has('register'))
-                                        <a href="{{ route('register') }}"
-                                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-                                            Register
-                                        </a>
-                                    @endif
-                                @endauth
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -102,79 +151,80 @@
             </div>
 
             <el-disclosure id="mobile-menu" hidden class="block md:hidden">
+                {{-- Definisikan variabel lagi untuk scope ini (opsional jika sudah di atas, tapi aman diulang) --}}
+                @php
+                    $currentUser = Auth::guard('web')->user() ?? Auth::guard('customer')->user();
+                    $isAdmin = Auth::guard('web')->check();
+                    $isCustomer = Auth::guard('customer')->check();
+                @endphp
+
                 <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-                    <!-- Current: "bg-gray-900 dark:bg-gray-950/50 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
-
-                    @auth
-
-                        <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                            Home
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
+                        Home
+                    </x-nav-link>
+                    @if ($isCustomer)
+                        <x-nav-link :href="route('customer_menu')" :active="request()->routeIs('customer_menu')">
+                            Cek Status Cucian
                         </x-nav-link>
-                    @else
-                        <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                            Home
+                    @endif
+                    @if ($isAdmin)
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            Dashboard
                         </x-nav-link>
-                    @endauth
-
+                    @endif
                 </div>
+
                 <div class="border-t border-white/10 pt-4 pb-3">
-                    @auth
+                    @if ($currentUser)
                         <div class="flex items-center px-5">
                             <div class="shrink-0">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt=""
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($currentUser->nama_lengkap) }}&background=random"
                                     class="size-10 rounded-full outline -outline-offset-1 outline-white/10" />
                             </div>
-
                             <div class="ml-3">
-                                <div class="text-base/5 font-medium text-white">{{ Auth::user()->name }}</div>
-                                <div class="text-sm font-medium text-gray-400">{{ Auth::user()->email }}</div>
+                                <div class="text-base/5 font-medium text-white">{{ $currentUser->nama_lengkap }}</div>
+                                <div class="text-sm font-medium text-gray-400">{{ $currentUser->email }}</div>
                             </div>
-
-                            <button type="button"
-                                class="relative ml-auto shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
-                                <span class="absolute -inset-1.5"></span>
-                                <span class="sr-only">View notifications</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                    data-slot="icon" aria-hidden="true" class="size-6">
-                                    <path
-                                        d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </button>
                         </div>
-                    @endauth
-                    <div class="mt-3 space-y-1 px-2">
-                        @auth
-                            <a href="{{ route('profile.edit') }}"
-                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">Your
-                                profile</a>
-                            <a href="{{ route('dashboard') }}"
-                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">Dashboard</a>
 
+                        <div class="mt-3 space-y-1 px-2">
+                            @if ($isAdmin)
+                                <a href="{{ route('profile.edit') }}"
+                                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your
+                                    Profile</a>
+
+                                <a href="{{ route('dashboard') }}"
+                                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Dashboard</a>
+                            @endif
+                            @if ($isCustomer)
+                                <a href="{{ route('profile.edit') }}"
+                                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your
+                                    Profile</a>
+                                <a href="{{ route('customer_menu') }}"
+                                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Cek
+                                    Status Cucian</a>
+                            @endif
+
+                            {{-- LOGOUT --}}
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); this.closest('form').submit();"
-                                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">Sign
-                                    out</a>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}"
-                                class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
-                                Log in
-                            </a>
-
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
-                                    Register
+                                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">
+                                    Sign out
                                 </a>
-                            @endif
-
-                        @endauth
-
-                    </div>
+                            </form>
+                        </div>
+                    @else
+                        {{-- Tampilan Mobile untuk Guest --}}
+                        <div class="mt-3 space-y-1 px-2">
+                            <a href="{{ route('login') }}"
+                                class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Log
+                                in</a>
+                            <a href="{{ route('register') }}"
+                                class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Register</a>
+                        </div>
+                    @endif
                 </div>
             </el-disclosure>
         </nav>
@@ -188,14 +238,14 @@
 
         <main>
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <!-- Your content -->
+                @livewire('notifications')
                 @yield('content')
             </div>
         </main>
     </div>
 
     <x-footer></x-footer>
-
+    @filamentScripts
 </body>
 
 </html>

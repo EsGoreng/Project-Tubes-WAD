@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Service;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -13,39 +14,46 @@ class ServiceSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('services')->insert([
+        $services = [
             [
-                'nama_paket' => 'Cuci Komplit (Reguler)',
+                'nama_paket' => 'Cuci Komplit Regular (3 Hari)',
                 'satuan' => 'Kg',
-                'harga' => 7000.00,
-                'estimasi_durasi' => 48, // 2 Hari
-                'is_active' => true,
-                'created_at' => now(),
+                'harga' => 7000,
+                'estimasi_durasi' => 72, // jam
+                'is_active' => true
             ],
             [
-                'nama_paket' => 'Cuci Kering + Setrika',
+                'nama_paket' => 'Cuci Komplit Express (1 Hari)',
                 'satuan' => 'Kg',
-                'harga' => 5000.00,
-                'estimasi_durasi' => 24, // 1 Hari
-                'is_active' => true,
-                'created_at' => now(),
+                'harga' => 12000,
+                'estimasi_durasi' => 24,
+                'is_active' => true
             ],
             [
-                'nama_paket' => 'Layanan Kilat (Express)',
+                'nama_paket' => 'Cuci Kering Setrika',
                 'satuan' => 'Kg',
-                'harga' => 12000.00,
-                'estimasi_durasi' => 5, // 5 Jam
-                'is_active' => true,
-                'created_at' => now(),
+                'harga' => 6000,
+                'estimasi_durasi' => 48,
+                'is_active' => true
             ],
             [
-                'nama_paket' => 'Bed Cover (Besar)',
+                'nama_paket' => 'Cuci Bedcover Besar',
                 'satuan' => 'Pcs',
-                'harga' => 25000.00,
-                'estimasi_durasi' => 72, // 3 Hari
-                'is_active' => true,
-                'created_at' => now(),
-            ]
-        ]);
+                'harga' => 25000,
+                'estimasi_durasi' => 72,
+                'is_active' => true
+            ],
+            [
+                'nama_paket' => 'Cuci Karpet (Per Meter)',
+                'satuan' => 'Pcs',
+                'harga' => 15000,
+                'estimasi_durasi' => 96,
+                'is_active' => true
+            ],
+        ];
+
+        foreach ($services as $service) {
+            Service::create($service);
+        }
     }
 }

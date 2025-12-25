@@ -22,24 +22,52 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request)
     {
-        $request->authenticate();
+        // 1. Validasi input dasar
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        $request->session()->regenerate();
+        // 2. Coba Login sebagai ADMIN (User)
+        // Menggunakan guard 'web' (default laravel untuk tabel users)
+        if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            // Redirect Admin ke dashboard Admin
+            return redirect()->intended('/dashboard');
+        }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // 3. Jika gagal Admin, Coba Login sebagai CUSTOMER
+        // Menggunakan guard 'customer' (untuk tabel customers)
+        if (Auth::guard('customer')->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            // Redirect Customer ke dashboard Customer
+            return redirect()->intended('/');
+        }
+
+        // 4. Jika keduanya gagal, kembalikan error
+        return back()->withErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ])->onlyInput('email');
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
-        Auth::guard('web')->logout();
+        // 1. Cek guard 'web' (Admin), jika login, maka logout.
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        }
 
+        if (Auth::guard('customer')->check()) {
+            Auth::guard('customer')->logout();
+        }
+
+        // 3. Hancurkan session
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
