@@ -72,11 +72,7 @@
             </div>
 
             <div x-show="activeTab === 'crm'" x-cloak x-transition>
-                <div class="p-4 bg-white shadow rounded-lg">
-                    <h2 class="text-xl font-bold mb-4">CRM Customer</h2>
-                    {{-- @livewire('crm-table') --}}
-                    <p class="text-gray-600">Konten tabel customer akan muncul di sini.</p>
-                </div>
+                    @livewire('customer-table')
             </div>
 
             <div x-show="activeTab === 'service'" x-cloak x-transition>
