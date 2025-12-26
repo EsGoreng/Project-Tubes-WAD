@@ -17,6 +17,7 @@ class ServiceSeeder extends Seeder
         $services = [
             [
                 'nama_paket' => 'Cuci Komplit Regular (3 Hari)',
+                'deskripsi' => 'cuci baju aowkaokw',
                 'satuan' => 'Kg',
                 'harga' => 7000,
                 'estimasi_durasi' => 72, // jam
@@ -24,6 +25,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'nama_paket' => 'Cuci Komplit Express (1 Hari)',
+                'deskripsi' => 'cuci baju aowkaokw',
                 'satuan' => 'Kg',
                 'harga' => 12000,
                 'estimasi_durasi' => 24,
@@ -31,6 +33,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'nama_paket' => 'Cuci Kering Setrika',
+                'deskripsi' => 'cuci baju aowkaokw',
                 'satuan' => 'Kg',
                 'harga' => 6000,
                 'estimasi_durasi' => 48,
@@ -38,6 +41,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'nama_paket' => 'Cuci Bedcover Besar',
+                'deskripsi' => 'cuci bedcover aowkaokw',
                 'satuan' => 'Pcs',
                 'harga' => 25000,
                 'estimasi_durasi' => 72,
@@ -45,6 +49,7 @@ class ServiceSeeder extends Seeder
             ],
             [
                 'nama_paket' => 'Cuci Karpet (Per Meter)',
+                'deskripsi' => 'cuci karpet aowkaokw',
                 'satuan' => 'Pcs',
                 'harga' => 15000,
                 'estimasi_durasi' => 96,

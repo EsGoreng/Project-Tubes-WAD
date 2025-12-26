@@ -34,6 +34,7 @@ class AuthenticatedSessionController extends Controller
         // Menggunakan guard 'web' (default laravel untuk tabel users)
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
             // Redirect Admin ke dashboard Admin
             return redirect()->intended('/dashboard');
         }
