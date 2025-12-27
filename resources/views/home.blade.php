@@ -94,31 +94,52 @@
             pertanyaan, saran, atau masukan terkait sistem yang dikembangkan, silakan menghubungi kami melalui informasi
             kontak yang tersedia. Kami terbuka terhadap umpan balik untuk pengembangan dan penyempurnaan sistem ke depannya.
         </p>
-        <form action="#" class="space-y-8">
+
+        @if (session('success'))
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert">
+                <span class="font-medium">Sukses!</span> {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert">
+                <span class="font-medium">Oops! Ada yang salah.</span>
+                <ul class="mt-1.5 list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('contact.send') }}" method="POST" class="space-y-8">
+            @csrf
             <div>
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your
                     email</label>
-                <input type="email" id="email"
+                <input type="email" id="email" name="email" value="{{ old('email') }}"
                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
                     placeholder="name@email.com" required>
             </div>
             <div>
                 <label for="subject"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Subject</label>
-                <input type="text" id="subject"
+                <input type="text" id="subject" name="subject" value="{{ old('subject') }}"
                     class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
                     placeholder="Let us know how we can help you" required>
             </div>
             <div class="sm:col-span-2">
                 <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Your
                     message</label>
-                <textarea id="message" rows="6"
+                <textarea id="message" name="message" rows="6"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Leave a comment..."></textarea>
+                    placeholder="Leave a comment...">{{ old('message') }}</textarea>
             </div>
             <button type="submit"
-                class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Send
-                message</button>
+                class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Kirim
+                Pesan</button>
         </form>
     </div>
 

@@ -14,6 +14,8 @@ Route::get('/terms-and-conditions', function () {
     return view('termsandconditions');
 })->name('termsandconditions');
 
+Route::post('/contact', [HomeController::class, 'sendContactEmail'])->name('contact.send');
+
 
 Route::middleware('auth:web,customer')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
