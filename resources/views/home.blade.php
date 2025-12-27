@@ -11,8 +11,8 @@
                 Laundry Bersih, Wangi, dan Tepat Waktu</h1>
             <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">Kami melayani
                 cuci, setrika, dan perawatan pakaian dengan hasil rapi dan higienis, siap dipakai tanpa ribet.</p>
-            <a href="#"
-                class="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900">
+            <a href="{{ route('customer_menu') }}"
+                class="mb-4 sm:mb-0 inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900">
                 Jemput Cucian Kamu
                 <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -29,8 +29,6 @@
             <img src="{{ asset('images/logo_main.svg') }}" alt="mockup">
         </div>
     </div>
-
-
 
     {{-- Services --}}
     <div class="mx-auto text-center mb-8 max-w-screen-sm lg:mb-16">
@@ -56,7 +54,7 @@
             <p class="col-span-full text-gray-500 dark:text-gray-400">Tidak ada layanan yang tersedia saat ini.</p>
         @endforelse
     </div>
-    <div class="mb-4 flex items-center justify-between gap-4 md:mb-8">
+    <div class="mb-4 mt-2 flex items-center justify-between gap-4 md:mb-8">
         <div></div>
         <a href="/price-list" title=""
             class="flex items-center text-base font-medium text-primary-700 hover:underline dark:text-primary-500">
@@ -67,6 +65,29 @@
                     d="M19 12H5m14 0-4 4m4-4-4-4" />
             </svg>
         </a>
+    </div>
+
+    {{-- Quotes --}}
+    <div class="max-w-7xl
+    px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
+        <figure class="max-w-screen-md mx-auto">
+            <svg class="h-12 mx-auto mb-3 text-gray-400 dark:text-gray-600" viewBox="0 0 24 27" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z"
+                    fill="currentColor" />
+            </svg>
+            <blockquote>
+                <p class="text-2xl font-medium text-gray-900 dark:text-white">"Flowbite is just awesome. It contains
+                    tons of predesigned components and pages starting from login screen to complex dashboard. Perfect
+                    choice for your next SaaS application."</p>
+            </blockquote>
+            <figcaption class="flex items-center justify-center mt-6 space-x-3">
+                <div class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
+                    <div class="pl-3 text-sm font-light text-gray-500 dark:text-gray-400">Random Fun Fact</div>
+                </div>
+            </figcaption>
+        </figure>
     </div>
 
     {{-- Team --}}
@@ -88,7 +109,7 @@
     </div>
 
     {{-- Contact Us --}}
-    <div id="contact" class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+    <div id="contact" class="py-8 lg:py-16 px-4 mx-auto max-w-3xl">
         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Contact Us</h2>
         <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Jika Anda memiliki
             pertanyaan, saran, atau masukan terkait sistem yang dikembangkan, silakan menghubungi kami melalui informasi

@@ -121,9 +121,9 @@
                 @forelse($filteredAreas as $code => $name)
                     <button wire:click="selectPopularArea('{{ $code }}')" wire:loading.attr="disabled"
                         class="flex items-center gap-3 px-3 py-2.5 text-left text-sm bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all duration-200 group border border-transparent hover:border-blue-200 dark:hover:border-blue-800 {{ $areaCode === $code
-                            ? 'outline outline-2 outline-blue-500 bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800'
+                            ? 'outline-2 outline-blue-500 bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800'
                             : '' }}">
-                        <div class="flex-shrink-0">
+                        <div class="shrink-0">
                             <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors {{ $areaCode === $code ? 'text-blue-600' : '' }}"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

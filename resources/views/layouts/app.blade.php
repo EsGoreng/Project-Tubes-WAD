@@ -29,7 +29,6 @@
                                 $isAdmin = Auth::guard('web')->check();
                             @endphp
                             <div class="ml-10 flex items-baseline space-x-4">
-                                <!-- Current: "bg-gray-900 dark:bg-gray-950/50 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
                                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                                     Home
                                 </x-nav-link>
@@ -37,7 +36,7 @@
                                     Price List
                                 </x-nav-link>
                                 <x-nav-link :href="route('termsandconditions')" :active="request()->routeIs('termsandconditions')">
-                                    Terms and Conditions
+                                    TnC
                                 </x-nav-link>
 
                                 <x-nav-link href="/#contact" :active="request()->routeIs('contact')">
@@ -46,7 +45,7 @@
 
                                 @if ($isCustomer)
                                     <x-nav-link :href="route('customer_menu')" :active="request()->routeIs('customer_menu')">
-                                        Check Laundry Status
+                                        Check Laundry
                                     </x-nav-link>
                                 @endif
                                 @if ($isAdmin)
@@ -66,7 +65,6 @@
                         @endphp
 
                         <div class="ml-4 flex items-center md:ml-6">
-                            {{-- Cek apakah ada user yang login (Admin ATAU Customer) --}}
 
                             @if ($currentUser)
 
@@ -90,7 +88,6 @@
                                     <el-menu anchor="bottom end" popover
                                         class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
 
-                                        {{-- MENU KHUSUS ADMIN --}}
                                         @if ($isAdmin)
                                             <a href="{{ route('dashboard') }}"
                                                 class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
@@ -103,11 +100,10 @@
                                             </a>
                                         @endif
 
-                                        {{-- MENU KHUSUS CUSTOMER --}}
                                         @if ($isCustomer)
                                             <a href="{{ route('customer_menu') }}"
                                                 class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
-                                                Cek Status Cucian
+                                                Check Laundry
                                             </a>
                                             <a href="{{ route('profile.edit') }}"
                                                 class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5">
@@ -116,7 +112,6 @@
                                             </a>
                                         @endif
 
-                                        {{-- LOGOUT (Sama untuk keduanya karena sudah dihandle Controller) --}}
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <a href="{{ route('logout') }}"
@@ -164,14 +159,13 @@
             </div>
 
             <el-disclosure id="mobile-menu" hidden class="block md:hidden">
-                {{-- Definisikan variabel lagi untuk scope ini (opsional jika sudah di atas, tapi aman diulang) --}}
                 @php
                     $currentUser = Auth::guard('web')->user() ?? Auth::guard('customer')->user();
                     $isAdmin = Auth::guard('web')->check();
                     $isCustomer = Auth::guard('customer')->check();
                 @endphp
 
-                <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+                <div class="flex flex-wrap space-y-1 px-2 pt-2 pb-3 sm:px-3 gap-y-2">
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         Home
                     </x-nav-link>
@@ -179,7 +173,7 @@
                         Price List
                     </x-nav-link>
                     <x-nav-link :href="route('termsandconditions')" :active="request()->routeIs('termsandconditions')">
-                        Terms and Conditions
+                        TnC
                     </x-nav-link>
 
                     <x-nav-link href="#contact" :active="request()->routeIs('contact')">
@@ -187,7 +181,7 @@
                     </x-nav-link>
                     @if ($isCustomer)
                         <x-nav-link :href="route('customer_menu')" :active="request()->routeIs('customer_menu')">
-                            Cek Status Cucian
+                            Check Laundry
                         </x-nav-link>
                     @endif
                     @if ($isAdmin)
