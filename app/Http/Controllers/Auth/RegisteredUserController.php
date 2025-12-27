@@ -31,10 +31,10 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'nama_lengkap' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'], // Cek unik di tabel customers
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'no_wa' => ['required', 'string'], // Tambahan kolom
-            'alamat' => ['required', 'string'], // Tambahan kolom
+            'no_wa' => ['required', 'string'],
+            'alamat' => ['required', 'text:200'],
         ]);
 
         $customer = Customer::create([
@@ -43,7 +43,6 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'no_wa' => $request->no_wa,
             'alamat' => $request->alamat,
-            'description' => 'Customer Baru Register Online', // Default value
         ]);
 
         event(new Registered($customer));

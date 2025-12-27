@@ -89,10 +89,12 @@
                     CRM
                 </x-filament::tabs.item>
 
-                <x-filament::tabs.item @click="activeTab = 'service'" :active="false"
-                    alpine-active="activeTab === 'service'">
-                    Services
-                </x-filament::tabs.item>
+                @if (auth()->user()->isAdmin())
+                    <x-filament::tabs.item @click="activeTab = 'service'" :active="false"
+                        alpine-active="activeTab === 'service'">
+                        Services
+                    </x-filament::tabs.item>
+                @endif
 
             </x-filament::tabs>
 
@@ -105,9 +107,11 @@
                     @livewire('customer-table')
                 </div>
 
-                <div x-show="activeTab === 'service'" x-cloak x-transition>
-                    @livewire('service-table')
-                </div>
+                @if (auth()->user()->isAdmin())
+                    <div x-show="activeTab === 'service'" x-cloak x-transition>
+                        @livewire('service-table')
+                    </div>
+                @endif
 
             </div>
         </div>
