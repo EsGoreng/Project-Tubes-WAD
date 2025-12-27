@@ -1,11 +1,10 @@
 <?php
 
+use App\Http\Controllers\HomeController; // Tambahkan ini
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home'); // Ubah baris ini
 
 Route::get('/price-list', function () {
     return view('pricelist');
