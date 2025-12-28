@@ -4,5 +4,8 @@
 
 @section('content')
 
+    @livewire('check-laundry')
+
+    @livewire('weather-widget')
 
 @endsection

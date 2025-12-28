@@ -32,10 +32,10 @@
                                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                                     Home
                                 </x-nav-link>
-                                <x-nav-link :href="route('pricelist')" :active="request()->routeIs('pricelist')">
-                                    Price List
+                                <x-nav-link href="/#price-list" :active="request()->routeIs('pricelist')">
+                                    Our Services
                                 </x-nav-link>
-                                <x-nav-link :href="route('termsandconditions')" :active="request()->routeIs('termsandconditions')">
+                                <x-nav-link href="/#terms-and-conditions" :active="request()->routeIs('termsandconditions')">
                                     TnC
                                 </x-nav-link>
 
@@ -169,10 +169,10 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         Home
                     </x-nav-link>
-                    <x-nav-link :href="route('pricelist')" :active="request()->routeIs('pricelist')">
-                        Price List
+                    <x-nav-link href="/#price-list" :active="request()->routeIs('pricelist')">
+                        Our Services
                     </x-nav-link>
-                    <x-nav-link :href="route('termsandconditions')" :active="request()->routeIs('termsandconditions')">
+                    <x-nav-link href="/#terms-and-condition" :active="request()->routeIs('termsandconditions')">
                         TnC
                     </x-nav-link>
 

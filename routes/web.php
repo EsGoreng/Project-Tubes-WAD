@@ -6,14 +6,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home'); // Ubah baris ini
 
-Route::get('/price-list', function () {
-    return view('pricelist');
-})->name('pricelist');
-
-Route::get('/terms-and-conditions', function () {
-    return view('termsandconditions');
-})->name('termsandconditions');
-
 Route::post('/contact', [HomeController::class, 'sendContactEmail'])->name('contact.send');
 
 

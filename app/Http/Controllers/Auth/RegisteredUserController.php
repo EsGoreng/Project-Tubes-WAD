@@ -30,11 +30,11 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nama_lengkap' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'no_wa' => ['required', 'string'],
-            'alamat' => ['required', 'text:200'],
+            'nama_lengkap' => ['required', 'string', 'max:45'],
+            'email' => ['required', 'string', 'email', 'max:45', 'unique:customers'],
+            'password' => ['required', 'confirmed'],
+            'no_wa' => ['required', 'string', 'max:45'],
+            'alamat' => ['required', 'string'],
         ]);
 
         $customer = Customer::create([

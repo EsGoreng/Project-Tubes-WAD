@@ -31,7 +31,7 @@
     </div>
 
     {{-- Services --}}
-    <div class="mx-auto text-center mb-8 max-w-screen-sm lg:mb-16">
+    <div id="price-list" class="mx-auto text-center mb-8 max-w-screen-sm lg:mb-16">
         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Layanan Kami</h2>
         <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">Kami menyediakan layanan laundry yang dirancang
             untuk membantu pengguna dalam mengelola proses pencucian pakaian secara efisien dan terorganisir..
@@ -53,18 +53,6 @@
         @empty
             <p class="col-span-full text-gray-500 dark:text-gray-400">Tidak ada layanan yang tersedia saat ini.</p>
         @endforelse
-    </div>
-    <div class="mb-4 mt-2 flex items-center justify-between gap-4 md:mb-8">
-        <div></div>
-        <a href="/price-list" title=""
-            class="flex items-center text-base font-medium text-primary-700 hover:underline dark:text-primary-500">
-            Lihat lebih detail
-            <svg class="ms-1 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 12H5m14 0-4 4m4-4-4-4" />
-            </svg>
-        </a>
     </div>
 
     {{-- Quotes --}}
@@ -110,7 +98,7 @@
 
     {{-- Contact Us --}}
     <div id="contact" class="py-8 lg:py-16 px-4 mx-auto max-w-3xl">
-        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Contact Us</h2>
+        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Hubungi Kami</h2>
         <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Jika Anda memiliki
             pertanyaan, saran, atau masukan terkait sistem yang dikembangkan, silakan menghubungi kami melalui informasi
             kontak yang tersedia. Kami terbuka terhadap umpan balik untuk pengembangan dan penyempurnaan sistem ke depannya.

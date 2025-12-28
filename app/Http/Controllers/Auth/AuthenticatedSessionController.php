@@ -51,8 +51,10 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::guard('customer')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+            $user = Auth::guard('customer')->user();
 
-            return redirect()->intended('/');
+
+            return redirect()->intended('/customer-menu');
         }
 
         return back()->withErrors([
