@@ -30,19 +30,19 @@ class AuthenticatedSessionController extends Controller
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             $user = Auth::guard('web')->user();
 
-            if (! Auth::guard('web')->user()->hasVerifiedEmail()) {
-                return redirect()->route('verification.notice');
-            }
+            // if (! Auth::guard('web')->user()->hasVerifiedEmail()) {
+            //     return redirect()->route('verification.notice');
+            // }
 
-            else if (!$user->hasVerifiedEmail()) {
-                Auth::guard('web')->logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
+            // else if (!$user->hasVerifiedEmail()) {
+            //     Auth::guard('web')->logout();
+            //     $request->session()->invalidate();
+            //     $request->session()->regenerateToken();
 
-                return back()->withErrors([
-                    'email' => 'Akun admin Anda belum diverifikasi. Silakan cek email Anda untuk verifikasi.',
-                ])->onlyInput('email');
-            }
+            //     return back()->withErrors([
+            //         'email' => 'Akun admin Anda belum diverifikasi. Silakan cek email Anda untuk verifikasi.',
+            //     ])->onlyInput('email');
+            // }
 
             $request->session()->regenerate();
 

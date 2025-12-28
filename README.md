@@ -1,59 +1,166 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SiBersih - Sistem Manajemen Laundry
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Dokumentasi instalasi dan pengaturan proyek **SiBersih**, sebuah aplikasi manajemen laundry berbasis web yang dibangun menggunakan Laravel dan Filament.
 
-## About Laravel
+## Prasyarat
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sebelum memulai, pastikan perangkat kamu sudah terinstal:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   [PHP](https://www.php.net/)
+-   [Composer](https://getcomposer.org/)
+-   [Node.js & NPM](https://nodejs.org/)
+-   Web Server (Laragon/XAMPP)
+-   Database (MySQL/MariaDB)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Langkah Instalasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Ikuti langkah-langkah berikut secara berurutan untuk menjalankan proyek ini di lingkungan lokal (local environment).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clone Repository
 
-## Laravel Sponsors
+Unduh source code proyek dari GitHub.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone [https://github.com/EsGoreng/Project-Tubes-WAD](https://github.com/EsGoreng/Project-Tubes-WAD)
+cd Project-Tubes-WAD
 
-### Premium Partners
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Install Dependensi Backend
 
-## Contributing
+Jalankan perintah berikut untuk mengunduh semua library PHP yang dibutuhkan.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
 
-## Code of Conduct
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Konfigurasi Environment (.env)
 
-## Security Vulnerabilities
+Salin file contoh konfigurasi dan buat file `.env` baru.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
 
-## License
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Buka file `.env` kamu dan sesuaikan konfigurasi berikut:
+
+**A. Kunci Aplikasi & Nama**
+Generate key baru dan ubah nama aplikasi.
+
+```bash
+php artisan key:generate
+
+```
+
+Ubah baris berikut di `.env`:
+
+```dotenv
+APP_NAME=SiBersih
+
+```
+
+**B. Konfigurasi Database**
+Pastikan kamu telah membuat database kosong bernama `sistem_laundry_db` di phpMyAdmin atau SQL client kamu, lalu sesuaikan `.env`:
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sistem_laundry_db
+DB_USERNAME=root
+DB_PASSWORD=
+
+```
+
+**C. Konfigurasi Queue**
+Ubah koneksi antrian menjadi sync:
+
+```dotenv
+QUEUE_CONNECTION=sync
+
+```
+
+**D. Konfigurasi Mailer (SMTP)**
+Untuk fitur pengiriman email, sesuaikan dengan kredensial SMTP (contoh menggunakan Gmail):
+
+```dotenv
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=uramazingdev@gmail.com
+MAIL_PASSWORD=masukkan_password_app_anda_disini
+MAIL_FROM_ADDRESS="uramazingdev@gmail.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
+```
+
+### 4. Setup Database & Seeding
+
+Jalankan migrasi untuk membuat tabel dan mengisi data dummy (seeder).
+
+```bash
+php artisan migrate:fresh --seed
+
+```
+
+### 5. Setup Frontend (Tailwind CSS)
+
+Instal dependensi untuk Tailwind CSS dan Vite.
+
+```bash
+npm install tailwindcss @tailwindcss/vite --save-dev
+
+```
+
+### 6. Setup Filament (Admin Panel)
+
+Install paket-paket Filament beserta plugin tambahannya (Excel & Apex Charts).
+
+```bash
+composer require filament/tables:"^4.0" filament/schemas:"^4.0" filament/forms:"^4.0" filament/infolists:"^4.0" filament/actions:"^4.0" filament/notifications:"^4.0" filament/widgets:"^4.0" pxlrbt/filament-excel leandrocfe/filament-apex-charts:"^4.0"
+
+```
+
+Lakukan instalasi panel Filament:
+
+```bash
+php artisan filament:install
+
+```
+
+---
+
+## Menjalankan Aplikasi
+
+1. Jalankan server lokal Laravel:
+
+```bash
+php artisan serve
+
+```
+
+2. (Opsional) Jika memerlukan build aset frontend:
+
+```bash
+npm run dev
+
+```
+
+3. Buka browser dan akses: `http://localhost:8000` atau `http://localhost:8000/admin` untuk panel admin.
+
+---
+
+**Notes:**
+
+-   Project ini adalah Tugas Besar (Tubes) WAD.
+
+```
+
+### Apakah kamu ingin saya menambahkan bagian lain, seperti cara penggunaan fitur atau daftar akun dummy untuk login?
+
+```
