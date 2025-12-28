@@ -144,6 +144,13 @@ php artisan serve
 
 ```
 
+atau menggunakan composer
+
+```bash
+php artisan serve
+
+```
+
 2. (Opsional) Jika memerlukan build aset frontend:
 
 ```bash
@@ -151,16 +158,6 @@ npm run dev
 
 ```
 
-3. Buka browser dan akses: `http://localhost:8000` atau `http://localhost:8000/admin` untuk panel admin.
+3. Buka browser dan akses: `http://localhost:8000`
 
 ---
-
-**Notes:**
-
--   Project ini adalah Tugas Besar (Tubes) WAD.
-
-```
-
-### Apakah kamu ingin saya menambahkan bagian lain, seperti cara penggunaan fitur atau daftar akun dummy untuk login?
-
-```
