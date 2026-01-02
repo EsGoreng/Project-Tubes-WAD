@@ -8,6 +8,7 @@
     <title>@yield('title')</title>
     @livewireStyles
     @filamentStyles
+    @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="icon" href="{{ asset('images/logo_mascot.svg') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />

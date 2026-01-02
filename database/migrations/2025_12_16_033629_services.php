@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_services');
             $table->string('nama_paket', 45);
             $table->text('deskripsi', 500);
-            $table->enum('satuan', ['Kg', 'Pcs']);
+            $table->enum('satuan', ['Kg', 'Pcs', 'm2', 'Pasang', 'Set']);
             $table->decimal('harga', 10, 2);
             $table->integer('estimasi_durasi'); // Durasi dalam jam/hari
             $table->boolean('is_active')->default(true);

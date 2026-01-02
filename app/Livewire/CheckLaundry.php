@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Order;
 use Livewire\Component;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Contracts\HasForms;
@@ -29,18 +30,54 @@ class CheckLaundry extends Component implements HasForms, HasTable
                     ->with(['orderDetails.service', 'latestStatus'])
             )
             ->columns([
+                TextColumn::make('id_orders')
+                    ->label('No. Order')
+                    ->formatStateUsing(fn ($state) => '#' . str_pad($state, 5, '0', STR_PAD_LEFT))
+                    ->sortable(),
+                    
                 TextColumn::make('tgl_masuk')
                     ->label('Tanggal Masuk')
-                    ->dateTime('d F Y H:i')
+                    ->dateTime('d M Y H:i')
                     ->sortable(),
+                    
+                TextColumn::make('is_pickup')
+                    ->label('Jenis')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => $state ? 'Dijemput' : 'Antar Sendiri')
+                    ->color(fn ($state) => $state ? 'warning' : 'success'),
+                    
                 TextColumn::make('latestStatus.status')
                     ->label('Status')
-                    ->badge(),
-                TextColumn::make('orderDetails.service.nama_layanan')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Perlu Dijemput' => 'warning',
+                        'Dicuci' => 'info',
+                        'Dijemur' => 'primary',
+                        'Disetrika' => 'secondary',
+                        'Siap' => 'success',
+                        default => 'gray',
+                    }),
+                    
+                TextColumn::make('orderDetails.service.nama_paket')
                     ->label('Layanan')
-                    ->listWithLineBreaks(),
-            ])
-            ->defaultSort('tgl_masuk', 'desc');
+                    ->listWithLineBreaks()
+                    ->limitList(2)
+                    ->expandableLimitedList(),
+                    
+                TextColumn::make('total_harga')
+                    ->label('Total')
+                    ->money('IDR')
+                    ->sortable(),
+                    
+                TextColumn::make('status_pembayaran')
+                    ->label('Pembayaran')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Lunas' => 'success',
+                        'Pending' => 'warning',
+                        default => 'gray',
+                    }),
+            ]);
     }
 
     public function render(): View

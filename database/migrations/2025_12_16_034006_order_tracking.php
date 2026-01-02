@@ -21,7 +21,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade'); // Hapus Order = Hapus history tracking
 
-            $table->enum('status', ['Dicuci', 'Dijemur', 'Disetrika', 'Siap']);
+            $table->enum('status', ['Perlu Dijemput', 'Dicuci', 'Dijemur', 'Disetrika', 'Siap']);
             $table->timestamps();
         });
     }

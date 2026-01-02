@@ -228,7 +228,7 @@
 
     {{-- Current Weather --}}
     @if ($currentWeather && !$isLoading)
-        <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-lg p-6 text-white">
+        <div class="bg-linear-to-br from-blue-500 to-blue-700 rounded-lg shadow-lg p-6 text-white">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm opacity-90">Cuaca Saat Ini</p>
