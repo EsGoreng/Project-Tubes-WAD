@@ -17,7 +17,7 @@
 
 <body class="h-full">
     <div class="min-h-full">
-        <nav class="bg-gray-800 dark:bg-gray-800/50">
+        <nav class="sticky top-0 z-50 bg-gray-800 dark:bg-gray-800/50 backdrop-blur-md">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
