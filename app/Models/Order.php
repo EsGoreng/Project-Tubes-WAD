@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
@@ -22,6 +20,8 @@ class Order extends Model
         'tgl_masuk',
         'tgl_selesai_estimasi',
         'total_harga',
+        'catatan',
+        'alamat_jemput',
         'status_pembayaran',
         'is_pickup',
     ];

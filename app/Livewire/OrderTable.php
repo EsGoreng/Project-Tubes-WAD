@@ -72,6 +72,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
             ->columns([
                 TextColumn::make('id_orders')
                     ->label('ID')
+                    ->formatStateUsing(fn ($state) => '#' . str_pad($state, 5, '0', STR_PAD_LEFT))
                     ->searchable(),
 
                 TextColumn::make('customer.nama_lengkap')
@@ -81,6 +82,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
 
                 TextColumn::make('tgl_masuk')
                     ->label('Tgl Masuk')
+                    ->sortable()
                     ->date('d M Y'),
 
                 TextColumn::make('tgl_selesai_estimasi')
@@ -96,11 +98,13 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                 TextColumn::make('latestStatus.status')
                     ->label('Status')
                     ->badge()
+                    ->sortable()
                     ->color(fn ($state) => match ($state) {
                         'Siap' => 'success',
                         'Disetrika' => 'info',
                         'Dijemur' => 'warning',
                         'Dicuci' => 'primary',
+                        'Perlu Dijempuit' => 'danger',
                         default => 'gray',
                     })
                     ->alignCenter(),
@@ -464,6 +468,13 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
 
                         Textarea::make('customer.alamat')
                             ->label('Alamat')
+                            ->rows(10)
+                            ->disabled()
+                            ->readonly()
+                            ->columns(150),
+
+                        Textarea::make('catatan')
+                            ->label('Catatan')
                             ->rows(10)
                             ->disabled()
                             ->readonly()

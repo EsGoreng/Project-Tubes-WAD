@@ -32,7 +32,9 @@ return new class extends Migration
             $table->dateTime('tgl_selesai_estimasi')->nullable();
             $table->decimal('total_harga', 10, 2)->default(0);
             $table->enum('status_pembayaran', ['Pending', 'Lunas'])->default('Pending');
-            $table->boolean('is_pickup')->default(false); // 0: Antar sendiri, 1: Dijemput
+            $table->boolean('is_pickup')->default(false);
+            $table->text('catatan')->nullable();
+            $table->text('alamat_jemput')->nullable();
             $table->timestamps();
         });
     }

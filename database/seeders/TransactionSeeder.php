@@ -10,7 +10,8 @@ use App\Models\Customer;
 use App\Models\OrderDetail;
 use App\Models\OrderTracking;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
+
 
 class TransactionSeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class TransactionSeeder extends Seeder
         $customers = Customer::all();
         $users = User::where('role', 'kasir')->get(); // Transaksi biasanya oleh kasir
         $services = Service::all();
+        $faker = Faker::create('id_ID');
 
         if ($customers->isEmpty() || $users->isEmpty() || $services->isEmpty()) {
             $this->command->info('Lewati TransactionSeeder karena data User/Customer/Service kosong.');
@@ -40,11 +42,13 @@ class TransactionSeeder extends Seeder
             $order = Order::create([
                 'customer_id' => $randomCustomer->id_customer,
                 'user_id' => $randomUser->id_user,
-                'tgl_masuk' => Carbon::now()->subDays(rand(0, 5)), // Tanggal acak 0-5 hari lalu
+                'tgl_masuk' => Carbon::now()->subDays(rand(0, 5)),
                 'tgl_selesai_estimasi' => Carbon::now()->addDays(2),
                 'status_pembayaran' => rand(0, 1) ? 'Lunas' : 'Pending',
+                'catatan' => $faker->paragraph(2),
+                'alamat_jemput' => $faker->address,
                 'is_pickup' => rand(0, 1),
-                'total_harga' => 0, // Nanti diupdate
+                'total_harga' => 0,
             ]);
 
             // 3. Isi Detail Order (Item laundry)
@@ -72,7 +76,7 @@ class TransactionSeeder extends Seeder
             $order->update(['total_harga' => $totalHargaTransaksi]);
 
             // 5. Buat Tracking (Simulasi History Status)
-            $possibleStatuses = ['Dicuci', 'Dijemur', 'Disetrika', 'Siap'];
+            $possibleStatuses = ['Perlu Dijemput', 'Dicuci', 'Dijemur', 'Disetrika', 'Siap'];
             
             // Tentukan sampai tahap mana order ini (Random 0-3)
             $currentStageIndex = rand(0, count($possibleStatuses) - 1);

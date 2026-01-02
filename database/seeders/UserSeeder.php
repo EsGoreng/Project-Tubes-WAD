@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             [
                 'nama_lengkap' => 'Intan Nurlistiyani',
                 'email' => 'intan9el@gmail.com',
-                'password' => Hash::make('admin123'), // Password di-hash
+                'password' => Hash::make('admin123')    , // Password di-hash
                 'role' => 'admin',
                 'created_at' => now(),
                 'updated_at' => now(),
