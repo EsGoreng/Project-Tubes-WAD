@@ -8,7 +8,6 @@
     <title>@yield('title')</title>
     @livewireStyles
     @filamentStyles
-    @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="icon" href="{{ asset('images/logo_mascot.svg') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
@@ -259,7 +258,7 @@
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 @livewire('notifications')
                 @yield('content')
-            </div>  
+            </div>
         </main>
     </div>
 
