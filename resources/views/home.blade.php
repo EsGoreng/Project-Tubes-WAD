@@ -60,13 +60,8 @@
     px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
         <figure class="max-w-screen-md mx-auto">
             <blockquote>
-                    @livewire('fun-fact')
+                @livewire('fun-fact')
             </blockquote>
-            <figcaption class="flex items-center justify-center mt-6 space-x-3">
-                <div class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
-                    <div class="pl-3 text-sm font-light text-gray-500 dark:text-gray-400">Random Fun Fact</div>
-                </div>
-            </figcaption>
         </figure>
     </div>
 
