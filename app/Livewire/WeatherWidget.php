@@ -36,25 +36,21 @@ class WeatherWidget extends Component
     {
         $this->popularAreas = [
 
-            // ===============================
             // KECAMATAN BOJONGSOANG
-            // ===============================
-            '32.04.08.2001' => 'Kab. Bandung - Kec. Bojongsoang - Desa Lengkong',
-            '32.04.08.2002' => 'Kab. Bandung - Kec. Bojongsoang - Desa Bojongsoang',
-            '32.04.08.2003' => 'Kab. Bandung - Kec. Bojongsoang - Desa Buahbatu',
-            '32.04.08.2004' => 'Kab. Bandung - Kec. Bojongsoang - Desa Cipagalo',
-            '32.04.08.2005' => 'Kab. Bandung - Kec. Bojongsoang - Desa Bojongsari',
-            '32.04.08.2006' => 'Kab. Bandung - Kec. Bojongsoang - Desa Tegalluar',
+            '32.04.08.2001' => 'Kec. Bojongsoang - Desa Lengkong',
+            '32.04.08.2002' => 'Kec. Bojongsoang - Desa Bojongsoang',
+            '32.04.08.2003' => 'Kec. Bojongsoang - Desa Buahbatu',
+            '32.04.08.2004' => 'Kec. Bojongsoang - Desa Cipagalo',
+            '32.04.08.2005' => 'Kec. Bojongsoang - Desa Bojongsari',
+            '32.04.08.2006' => 'Kec. Bojongsoang - Desa Tegalluar',
 
-            // ===============================
             // KECAMATAN DAYEUHKOLOT
-            // ===============================
-            '32.04.12.1001' => 'Kab. Bandung - Kec. Dayeuhkolot - Kel. Pasawahan',
-            '32.04.12.2002' => 'Kab. Bandung - Kec. Dayeuhkolot - Desa Dayeuhkolot',
-            '32.04.12.2003' => 'Kab. Bandung - Kec. Dayeuhkolot - Desa Cangkuang Wetan',
-            '32.04.12.2004' => 'Kab. Bandung - Kec. Dayeuhkolot - Desa Cangkuang Kulon',
-            '32.04.12.2005' => 'Kab. Bandung - Kec. Dayeuhkolot - Desa Sukapura',
-            '32.04.12.2006' => 'Kab. Bandung - Kec. Dayeuhkolot - Desa Citeureup',
+            '32.04.12.1001' => 'Kec. Dayeuhkolot - Kel. Pasawahan',
+            '32.04.12.2003' => 'Kec. Dayeuhkolot - Desa Cangkuang Wetan',
+            '32.04.12.2004' => 'Kec. Dayeuhkolot - Desa Cangkuang Kulon',
+            '32.04.12.2002' => 'Kec. Dayeuhkolot - Desa Dayeuhkolot',
+            '32.04.12.2005' => 'Kec. Dayeuhkolot - Desa Sukapura',
+            '32.04.12.2006' => 'Kec. Dayeuhkolot - Desa Citeureup',
 
         ];
 

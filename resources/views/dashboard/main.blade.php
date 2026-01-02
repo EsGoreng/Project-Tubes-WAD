@@ -49,20 +49,6 @@
                     @livewire('customer-stats-chart')
                 </div>
 
-                <div x-show="activeTab === 'calendar'" x-cloak x-transition>
-                    <div class="p-4 bg-white shadow rounded-lg">
-                        <h2 class="text-xl font-bold mb-4">Calendar</h2>
-                        <p class="text-gray-600">Kalender Libur</p>
-                    </div>
-                </div>
-
-                <div x-show="activeTab === 'weather'" x-cloak x-transition>
-                    <div class="p-4 bg-white shadow rounded-lg">
-                        <h2 class="text-xl font-bold mb-4">Weather</h2>
-                        <p class="text-gray-600">Weather</p>
-                    </div>
-                </div>
-
             </div>
 
             <div x-show="activeTab === 'calendar'" x-cloak x-transition>
