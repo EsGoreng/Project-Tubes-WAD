@@ -52,10 +52,7 @@
             </div>
 
             <div x-show="activeTab === 'calendar'" x-cloak x-transition>
-                <div class="p-4 bg-white shadow rounded-lg">
-                    <h2 class="text-xl font-bold mb-4">Calendar</h2>
-                    <p class="text-gray-600">Kalender Libur</p>
-                </div>
+                @livewire('holiday-calendar')
             </div>
 
             <div x-show="activeTab === 'weather'" x-cloak x-transition>
