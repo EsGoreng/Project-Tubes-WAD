@@ -35,7 +35,6 @@ class HolidayCalendar extends Component
         $this->error = null;
 
         try {
-            // Cache data selama 30 hari
             $cacheKey = 'holidays_' . $this->selectedYear;
             
             $data = Cache::remember($cacheKey, now()->addDays(30), function () {
@@ -53,7 +52,6 @@ class HolidayCalendar extends Component
 
                     $data = $response->json();
                     
-                    // Simpan backup cache
                     Cache::put('holidays_' . $this->selectedYear . '_backup', $data, now()->addDays(90));
                     
                     return $data;
@@ -67,7 +65,6 @@ class HolidayCalendar extends Component
                 throw new \Exception('Data hari libur tidak tersedia');
             }
 
-            // Merge dengan fallback data untuk melengkapi data yang kurang
             $fallbackData = $this->getFallbackData();
             $mergedData = $this->mergeHolidays($data, $fallbackData);
             
@@ -79,7 +76,6 @@ class HolidayCalendar extends Component
             $this->error = 'Tidak dapat mengambil data hari libur. Menampilkan data cache.';
             \Log::error('Holiday fetch error: ' . $e->getMessage());
             
-            // Coba ambil dari backup cache
             $backupCache = Cache::get('holidays_' . $this->selectedYear . '_backup');
             $fallbackData = $this->getFallbackData();
             
@@ -108,7 +104,6 @@ class HolidayCalendar extends Component
         $startOfMonth = $date->copy()->startOfMonth();
         $endOfMonth = $date->copy()->endOfMonth();
         
-        // Mulai dari hari Minggu minggu pertama
         $startDate = $startOfMonth->copy()->startOfWeek(Carbon::SUNDAY);
         $endDate = $endOfMonth->copy()->endOfWeek(Carbon::SATURDAY);
         
@@ -120,7 +115,6 @@ class HolidayCalendar extends Component
             $isHoliday = false;
             $holidayInfo = null;
             
-            // Cek apakah tanggal ini adalah hari libur
             foreach ($this->holidays as $holiday) {
                 if ($holiday['tanggal'] === $dateString) {
                     $isHoliday = true;
@@ -150,21 +144,17 @@ class HolidayCalendar extends Component
             $currentYear = now()->year;
             $nextYear = $currentYear + 1;
             
-            // Ambil data tahun ini
             $cacheKey1 = 'holidays_' . $currentYear;
             $holidays1 = Cache::get($cacheKey1);
             
-            // Jika tidak ada di cache, coba fetch atau gunakan backup
             if (!$holidays1) {
                 $holidays1 = Cache::get('holidays_' . $currentYear . '_backup', []);
             }
             
-            // Ambil data tahun depan
             $cacheKey2 = 'holidays_' . $nextYear;
             $holidays2 = Cache::get($cacheKey2);
             
             if (!$holidays2) {
-                // Coba fetch tahun depan dengan timeout pendek
                 try {
                     $response = Http::timeout(15)
                         ->retry(2, 100)
@@ -199,7 +189,6 @@ class HolidayCalendar extends Component
                 }
             }
 
-            // Urutkan berdasarkan tanggal terdekat
             usort($upcoming, function($a, $b) {
                 return $a['days_until'] <=> $b['days_until'];
             });
@@ -256,12 +245,10 @@ class HolidayCalendar extends Component
 
     public function refresh()
     {
-        // Clear cache
         Cache::forget('holidays_' . $this->selectedYear);
         Cache::forget('holidays_' . $this->currentYear);
         Cache::forget('holidays_' . ($this->currentYear + 1));
         
-        // Reload data
         $this->fetchHolidays();
         
         $this->dispatch('holiday-refreshed');
@@ -301,28 +288,22 @@ class HolidayCalendar extends Component
 
     private function mergeHolidays($apiData, $fallbackData)
     {
-        // Buat array dengan key tanggal untuk cek duplikat
         $merged = [];
         
-        // Tambahkan semua data dari API
         foreach ($apiData as $holiday) {
             $merged[$holiday['tanggal']] = $holiday;
         }
         
-        // Tambahkan data fallback yang belum ada di API
         foreach ($fallbackData as $holiday) {
             if (!isset($merged[$holiday['tanggal']])) {
                 $merged[$holiday['tanggal']] = $holiday;
             }
         }
-        
-        // Kembalikan sebagai array biasa (tanpa key)
-        return array_values($merged);
+                return array_values($merged);
     }
 
     private function getFallbackData()
     {
-        // Data fallback untuk tahun 2026 (bisa ditambahkan tahun lainnya)
         $fallbackData = [
             2025 => [
                 ['tanggal' => '2025-1-1', 'tanggal_display' => 'Rabu, 1 Januari 2025', 'keterangan' => 'Tahun Baru 2025', 'is_cuti' => false],

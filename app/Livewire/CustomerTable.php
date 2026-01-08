@@ -42,20 +42,14 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
     use InteractsWithTable;
     use InteractsWithForms;
 
-    // Properties untuk API Hari Libur Nasional
     public $holidays = [];
     public $upcomingHoliday = null;
 
     public function mount()
     {
-        // Load data hari libur saat komponen dimuat
         $this->fetchHolidays();
     }
 
-    /**
-     * API HARI LIBUR NASIONAL
-     * Sesuai dokumen: Untuk analisis pola kunjungan pelanggan
-     */
     public function fetchHolidays()
     {
         try {
@@ -68,14 +62,12 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
             if ($response->successful()) {
                 $allHolidays = collect($response->json());
                 
-                // Ambil hari libur yang akan datang
                 $this->upcomingHoliday = $allHolidays
                     ->filter(function($holiday) {
                         return strtotime($holiday['holiday_date']) >= strtotime('today');
                     })
                     ->first();
 
-                // Simpan semua hari libur untuk analisis
                 $this->holidays = $allHolidays->toArray();
             }
         } catch (\Exception $e) {
@@ -84,10 +76,6 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
         }
     }
 
-    /**
-     * Generate ID Customer otomatis (Simple: 1, 2, 3, ...)
-     * Robust untuk VARCHAR atau INT
-     */
     private function generateCustomerId()
     {
         $lastCustomer = Customer::orderBy('id_customer', 'desc')->first();
@@ -96,7 +84,6 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
             return (int) $lastCustomer->id_customer + 1;
         }
 
-        // Jika database kosong atau id bukan angka, mulai dari 1
         return 1;
     }
 
@@ -254,7 +241,6 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
                     ->action(function (Customer $record) {
                         $orderCount = $record->orders()->count();
                         
-                        // Hapus tetap, tidak peduli ada transaksi atau tidak
                         $record->delete();
 
                         if ($orderCount > 0) {
@@ -279,7 +265,6 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
                     ->color('primary')
                     ->schema(fn(Schema $schema) => $this->getCustomerForm($schema))
                     ->action(function (array $data) {
-                        // Auto-generate ID Customer
                         $customerId = $this->generateCustomerId();
 
                         Customer::create([
@@ -300,7 +285,7 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
                     }),
 
                 ExportAction::make()
-                    ->label('Export')
+                    ->label('Ekspor')
                     ->icon('heroicon-o-document-arrow-down')
                     ->color('warning')
                     ->exports([
@@ -359,10 +344,6 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
             ]);
     }
 
-    /**
-     * Form Schema untuk Create & Edit Pelanggan
-     * Sesuai mockup: Nama, WhatsApp, Email, Alamat
-     */
     public function getCustomerForm(Schema $schema): Schema
     {
         return $schema
@@ -423,10 +404,6 @@ class CustomerTable extends Component implements HasTable, HasForms, HasActions
             ]);
     }
 
-    /**
-     * Form Schema untuk View Detail & Riwayat Transaksi
-     * Sesuai mockup hal. 31: Lihat riwayat order pelanggan dengan detail laundry
-     */
     public function getCustomerDetailForm(Schema $schema): Schema
     {
         return $schema
