@@ -15,8 +15,7 @@ class WeatherWidget extends Component
     public $isLoading = true;
     public $error = null;
 
-    // Location Selection Properties
-    public $areaCode = '32.04.08.2002'; // Default: Bandung Wetan
+    public $areaCode = '32.04.08.2002'; 
     public $showLocationPicker = false;
     public $popularAreas = [];
     public $searchQuery = '';

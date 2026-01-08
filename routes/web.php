@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\HomeController; // Tambahkan ini
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home'); // Ubah baris ini
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::post('/contact', [HomeController::class, 'sendContactEmail'])->name('contact.send');
 
@@ -24,7 +24,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 Route::middleware(['auth:customer'])->group(function () {
     Route::get('/customer-menu', function () {
-        return view('dashboard.customer'); // Buat view baru untuk customer
+        return view('dashboard.customer');
     })->name('customer_menu');
 });
 
