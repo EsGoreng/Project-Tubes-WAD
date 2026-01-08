@@ -6,7 +6,7 @@
                     <img src="{{ asset('images/logo_main.svg') }}" class="h-24 me-3" alt="FlowBite Logo" />
                 </a>
             </div>
-            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+            <div class="grid grid-cols-1 gap-8 sm:gap-6 sm:grid-cols-2">
                 <div>
                     <h2 class="mb-6 text-sm font-semibold text-gray-900 dark:text-white uppercase">About</h2>
                     <ul class="text-gray-400 dark:text-white-200 font-medium">
