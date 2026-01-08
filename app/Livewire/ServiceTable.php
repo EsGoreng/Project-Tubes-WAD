@@ -61,14 +61,14 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
                     ->sortable(),
 
                 TextColumn::make('nama_paket')
-                    ->label('Service Name')
+                    ->label('Nama Layanan')
                     ->searchable()
                     ->sortable()
                     ->weight('bold')
                     ->description(fn(Service $record) => $record->deskripsi ? substr($record->deskripsi, 0, 50) . '...' : '-'),
 
                 TextColumn::make('harga')
-                    ->label('Price')
+                    ->label('Harga')
                     ->money('IDR')
                     ->sortable()
                     ->weight('bold')
@@ -85,13 +85,13 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
                     ->alignCenter(),
 
                 TextColumn::make('estimasi_durasi')
-                    ->label('Estimation (Hours)')
+                    ->label('Estimasi')
                     ->suffix(' jam')
                     ->alignCenter()
                     ->color('primary'),
 
                 ToggleColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Status')
                     ->onColor('success')
                     ->offColor('danger')
                     ->alignCenter(),
@@ -140,7 +140,7 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
             ])
             ->recordActions([
                 Action::make('view')
-                    ->label('View')
+                    ->label('Lihat')
                     ->color('success')
                     ->icon('heroicon-o-eye')
                     ->record(fn(Service $record) => $record)
@@ -180,7 +180,7 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
                     }),
 
                 Action::make('delete')
-                    ->label('Delete')
+                    ->label('Hapus')
                     ->icon('heroicon-o-trash')
                     ->color('danger')
                     ->requiresConfirmation()
@@ -222,7 +222,7 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
                     }),
 
                 ExportAction::make()
-                    ->label('Export Daftar Harga')
+                    ->label('Ekspor Daftar Harga')
                     ->icon('heroicon-o-document-arrow-down')
                     ->color('warning')
                     ->exports([
@@ -327,14 +327,14 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
                     ->description('Masukkan detail paket layanan laundry yang akan ditawarkan')
                     ->schema([
                         TextInput::make('nama_paket')
-                            ->label('Service Name')
+                            ->label('Nama Layanan')
                             ->placeholder('Contoh: Cuci Komplit, Cuci Setrika, Cuci Sepatu')
                             ->required()
                             ->maxLength(100)
                             ->columnSpan(2),
 
                         TextInput::make('harga')
-                            ->label('Price')
+                            ->label('Harga')
                             ->placeholder('0')
                             ->required()
                             ->numeric()
@@ -354,7 +354,7 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
                             ->helperText('Satuan perhitungan harga'),
 
                         TextInput::make('estimasi_durasi')
-                            ->label('Estimation (Hours)')
+                            ->label('Estimasi')
                             ->placeholder('0')
                             ->required()
                             ->numeric()
@@ -371,7 +371,7 @@ class ServiceTable extends Component implements HasTable, HasForms, HasActions
                             ->inline(false),
 
                         Textarea::make('deskripsi')
-                            ->label('Description')
+                            ->label('Deskripsi')
                             ->placeholder('Contoh: Layanan cuci + setrika + lipat rapi. Cocok untuk pakaian harian.')
                             ->rows(4)
                             ->maxLength(500)
