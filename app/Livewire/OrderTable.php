@@ -171,7 +171,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
             ])
             ->recordActions([
                 Action::make('view')
-                    ->label('View')
+                    ->label('Lihat')
                     ->color('success')
                     ->icon('heroicon-o-eye')
                     ->record(fn(Order $record) => $record)
@@ -211,7 +211,6 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                                 'total_harga'           => $data['total_harga'],
                             ]);
 
-                            // Handle Order Details (Update, Create, Delete)
                             $existingIds = $record->orderDetails()->pluck('id_order_details')->toArray();
                             $submittedDetails = data_get($data, 'orderDetails', []);
                             $submittedIds = [];
@@ -220,7 +219,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                                 $detailId = $detail['id_order_details'] ?? null;
 
                                 if ($detailId && in_array($detailId, $existingIds)) {
-                                    // Update existing
+
                                     $record->orderDetails()->where('id_order_details', $detailId)->update([
                                         'service_id'     => $detail['service_id'],
                                         'qty'            => $detail['qty'],
@@ -229,7 +228,6 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                                     ]);
                                     $submittedIds[] = $detailId;
                                 } else {
-                                    // Create new
                                     $record->orderDetails()->create([
                                         'service_id'     => $detail['service_id'],
                                         'qty'            => $detail['qty'],
@@ -239,13 +237,11 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                                 }
                             }
 
-                            // Delete removed items
                             $idsToDelete = array_diff($existingIds, $submittedIds);
                             if (!empty($idsToDelete)) {
                                 $record->orderDetails()->whereIn('id_order_details', $idsToDelete)->delete();
                             }
 
-                            // Handle Tracking Status Update
                             $newStatus = $data['tracking_status'] ?? null;
                             $currentStatus = $record->latestStatus?->status;
                             if ($newStatus && $newStatus !== $currentStatus) {
@@ -261,7 +257,7 @@ class OrderTable extends Component implements HasTable, HasForms, HasActions
                     }),
 
                 Action::make('delete')
-                    ->label('Delete')
+                    ->label('Hapus')
                     ->icon('heroicon-o-trash')
                     ->color('danger')
                     ->requiresConfirmation()

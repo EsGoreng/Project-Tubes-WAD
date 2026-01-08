@@ -34,19 +34,19 @@
                                     Home
                                 </x-nav-link>
                                 <x-nav-link href="/#price-list" :active="request()->routeIs('pricelist')">
-                                    Our Services
+                                    Layanan
                                 </x-nav-link>
-                                <x-nav-link href="/#terms-and-conditions" :active="request()->routeIs('termsandconditions')">
-                                    TnC
+                                <x-nav-link href="/#about-us" :active="request()->routeIs('pricelist')">
+                                    Tentang Kami
                                 </x-nav-link>
 
                                 <x-nav-link href="/#contact" :active="request()->routeIs('contact')">
-                                    Contact Us
+                                    Kontak
                                 </x-nav-link>
 
                                 @if ($isCustomer)
                                     <x-nav-link :href="route('customer_menu')" :active="request()->routeIs('customer_menu')">
-                                        Check Laundry
+                                        Cek Laundry
                                     </x-nav-link>
                                 @endif
                                 @if ($isAdmin)

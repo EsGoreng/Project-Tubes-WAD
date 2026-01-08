@@ -66,10 +66,12 @@
     </div>
 
     {{-- Team --}}
-    <div class="py-8 px-4 mx-auto text-center lg:py-16 lg:px-6">
+    <div id="about-us" class="py-8 px-4 mx-auto text-center lg:py-16 lg:px-6">
         <div class="mx-auto mb-8 max-w-screen-sm lg:mb-16">
-            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Our team</h2>
-            <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">Proyek ini dikembangkan oleh tim mahasiswa
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Tentang Kami</h2>
+            <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">Aplikasi kasir dan tracking berbasis web ini
+                dirancang untuk menertibkan manajemen usaha laundry melalui pencatatan transaksi dan pemantauan status
+                pesanan secara real-time. Proyek ini dikembangkan oleh tim mahasiswa
                 Program Studi Sistem Informasi sebagai bagian dari Tugas Besar mata kuliah <b>Pengembangan Aplikasi Web</b>.
             </p>
         </div>

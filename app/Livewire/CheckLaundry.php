@@ -53,7 +53,7 @@ class CheckLaundry extends Component implements HasForms, HasTable
                         'Perlu Dijemput' => 'warning',
                         'Dicuci' => 'info',
                         'Dijemur' => 'primary',
-                        'Disetrika' => 'secondary',
+                        'Disetrika' => 'primary',
                         'Siap' => 'success',
                         default => 'gray',
                     }),
