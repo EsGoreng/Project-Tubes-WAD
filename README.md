@@ -1,5 +1,9 @@
 # SiBersih - Sistem Manajemen Laundry
 
+![Logo Proyek](public/images/logo_main.png)
+
+Aplikasi kasir dan tracking berbasis web ini dirancang untuk menertibkan manajemen usaha laundry melalui pencatatan transaksi dan pemantauan status pesanan secara real-time. Fitur cek status mandiri memungkinkan pelanggan memantau progres (cuci/setrika/selesai) tanpa perlu menghubungi admin, sehingga mengurangi beban komunikasi. Aplikasi ini juga terintegrasi dengan API cuaca untuk membantu estimasi waktu pengerjaan, terutama pada proses pengeringan yang dipengaruhi kondisi cuaca.
+
 Dokumentasi instalasi dan pengaturan proyek **SiBersih**, sebuah aplikasi manajemen laundry berbasis web yang dibangun menggunakan Laravel dan Filament.
 
 ## Prasyarat
@@ -92,9 +96,9 @@ MAIL_MAILER=smtp
 MAIL_SCHEME=null
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
-MAIL_USERNAME=uramazingdev@gmail.com
+MAIL_USERNAME=uremail@gmail.com
 MAIL_PASSWORD=masukkan_password_app_anda_disini
-MAIL_FROM_ADDRESS="uramazingdev@gmail.com"
+MAIL_FROM_ADDRESS="uremail@gmail.com"
 MAIL_FROM_NAME="${APP_NAME}"
 
 ```
