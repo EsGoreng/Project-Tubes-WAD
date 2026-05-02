@@ -141,17 +141,26 @@ php artisan filament:install
 ## Menjalankan Aplikasi Via Docker
 
 1. Build dan jalankan semua container
+
+```bash
 docker compose -f docker-compose.yml up -d --build
+```
 
-2. Generate app key (pertama kali)
+3. Generate app key (pertama kali)
+
+```bash
 docker compose -f docker-compose.yml exec app php artisan key:generate
+```
 
-3. Jalankan migrasi
+4. Jalankan migrasi
+```bash
 docker compose -f docker-compose.yml exec app php artisan migrate
+```
 
-4. Seed database
+5. Seed database
+```bash
 docker compose -f docker-compose.yml exec app php artisan db:seed
-
+```
 
 ---
 
