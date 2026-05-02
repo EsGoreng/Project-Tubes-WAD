@@ -72,11 +72,11 @@ Pastikan kamu telah membuat database kosong bernama `sistem_laundry_db` di phpMy
 
 ```dotenv
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=127.0.0.1 //kalau pake docker isi dengan 'mysql'
 DB_PORT=3306
 DB_DATABASE=sistem_laundry_db
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD= //kalau pake docker isi dengan 'secret'
 
 ```
 
@@ -136,6 +136,22 @@ Lakukan instalasi panel Filament:
 php artisan filament:install
 
 ```
+
+---
+## Menjalankan Aplikasi Via Docker
+
+1. Build dan jalankan semua container
+docker compose -f docker-compose.yml up -d --build
+
+2. Generate app key (pertama kali)
+docker compose -f docker-compose.yml exec app php artisan key:generate
+
+3. Jalankan migrasi
+docker compose -f docker-compose.yml exec app php artisan migrate
+
+4. Seed database
+docker compose -f docker-compose.yml exec app php artisan db:seed
+
 
 ---
 
