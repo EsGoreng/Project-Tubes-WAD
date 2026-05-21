@@ -4,13 +4,13 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     server: {
-            host: '0.0.0.0', // Membuka akses agar bisa dijangkau dari luar container
+            host: '0.0.0.0', 
             port: 5173,
             hmr: {
-                host: 'localhost', // Memberitahu browser untuk mencari HMR di localhost
+                host: 'localhost', 
             },
             watch: {
-                usePolling: true, // WAJIB untuk pengguna Windows agar perubahan file terdeteksi
+                usePolling: true, 
             },
         },
     plugins: [
