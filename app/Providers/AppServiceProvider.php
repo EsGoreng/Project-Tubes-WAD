@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,11 +25,15 @@ class AppServiceProvider extends ServiceProvider
         //
         FilamentColor::register([
             'danger' => Color::Red,
-            'gray' => Color::Slate, 
+            'gray' => Color::Slate,
             'info' => Color::Blue,
-            'primary' => Color::Indigo, 
+            'primary' => Color::Indigo,
             'success' => Color::Green,
             'warning' => Color::Amber,
         ]);
+
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
